@@ -25,6 +25,8 @@
  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+ <script async="async"  src="https://cdn.rawgit.com/sergiottellez/TFG/0a02bc85/src/main/webapp/WEB-INF/jsp/confirmar.js"></script>
+
 </head>
 <body>
 <div class="container-fluid">
@@ -46,7 +48,6 @@
      <th>Antiguedad</th>
      <th>Reciente</th>
      <th>Activo</th>
-     <th>Rol</th>
      <th>Editar</th>
      <th>Eliminar</th>
     </tr>
@@ -77,15 +78,6 @@
   </div>
  </div>
 </div>
-   <script async="async">
-function confirmar()
-{
-	if(confirm('¿Estas seguro de eliminar este usuario?'))
-		return true;
-	else
-		return false;
-}
-</script>
 
 <footer>
         <div class='define'>

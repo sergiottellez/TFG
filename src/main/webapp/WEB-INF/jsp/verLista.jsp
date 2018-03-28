@@ -15,7 +15,7 @@
 
 <html>
 <head>
-    <link rel="shortcut icon" href="https://cdn.rawgit.com/sergiottellez/TFG/3d4413b2/src/main/webapp/WEB-INF/jsp/images/logo069_400x400.png">
+    <link rel="shortcut icon" href="https://cdn.rawgit.com/sergiottellez/TFG/289ded45/src/main/webapp/WEB-INF/jsp/images/logo069_400x400.ico">
  <title>LISTADO SOCIOS</title>
 
 

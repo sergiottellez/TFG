@@ -16,6 +16,8 @@
     >
 
 <head>
+        <link rel="shortcut icon" href="https://cdn.rawgit.com/sergiottellez/TFG/289ded45/src/main/webapp/WEB-INF/jsp/images/logo069_400x400.ico">
+
 	<title>SISTEDES Login</title>
 	<link rel="stylesheet" type="text/css" href="https://cdn.rawgit.com/sergiottellez/TFG/b4668f82/src/main/webapp/WEB-INF/jsp/login.css" />
 	<link rel="stylesheet" href="https://cdn.rawgit.com/sergiottellez/TFG/b4668f82/src/main/webapp/WEB-INF/jsp/bootstrap.min.css"/>

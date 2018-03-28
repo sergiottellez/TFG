@@ -4,6 +4,8 @@
 "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
+        <link rel="shortcut icon" href="https://cdn.rawgit.com/sergiottellez/TFG/289ded45/src/main/webapp/WEB-INF/jsp/images/logo069_400x400.ico">
+
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Access denied</title>
 </head>

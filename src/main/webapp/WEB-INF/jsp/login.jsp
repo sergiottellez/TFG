@@ -17,10 +17,10 @@
 
 <head>
 	<title>SISTEDES Login</title>
-	<link rel="stylesheet" type="text/css" href="login.css" />
-	<link rel="stylesheet" href="bootstrap.min.css"/>
-  	<script src="jquery.min.js"> </script>
-        <script src="boostrap.min.js" > </script>
+	<link rel="stylesheet" type="text/css" href="https://cdn.rawgit.com/sergiottellez/TFG/b4668f82/src/main/webapp/WEB-INF/jsp/login.css" />
+	<link rel="stylesheet" href="https://cdn.rawgit.com/sergiottellez/TFG/b4668f82/src/main/webapp/WEB-INF/jsp/bootstrap.min.css"/>
+  	<script src="https://cdn.rawgit.com/sergiottellez/TFG/b4668f82/src/main/webapp/WEB-INF/jsp/jquery.min.js"> </script>
+        <script src="https://cdn.rawgit.com/sergiottellez/TFG/b4668f82/src/main/webapp/WEB-INF/jsp/bootstrap.min.js" > </script>
 
       <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css" rel="stylesheet" />
 </head>

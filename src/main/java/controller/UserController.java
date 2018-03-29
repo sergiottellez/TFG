@@ -156,7 +156,7 @@ public class UserController {
           model.setViewName("/verLista");
         return model;
     }else{
-              model.setViewName("login");
+              model.setViewName("home");
         return model;
         }
     }

@@ -38,6 +38,10 @@
                 <prop key="deleteUser/*">userController</prop>
                 <prop key="userNewForm">userController</prop>
                 <prop key="newUser">userController</prop>
+                <prop key="home">userController</prop>
+                <prop key="summary">userController</prop>
+
+
 
             </props>
         </property>

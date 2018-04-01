@@ -75,6 +75,9 @@
    </table>
    <br />
    <a href="newUser" class="btn btn-success"><i class="glyphicon glyphicon-edit"></i> Nuevo Socio</a>
+   <a href="importExcel" class="btn btn-success"><i class="glyphicon glyphicon-edit"></i>Importar desde Excel   </a>
+   <a href="summary" class="btn btn-success"><i class="glyphicon glyphicon-edit"></i>Summary </a>
+
   </div>
  </div>
 </div>

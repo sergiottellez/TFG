@@ -11,13 +11,18 @@ import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import model.Conector;
+import model.Tuple;
 import model.User;
 
 
@@ -153,7 +158,7 @@ public class UserController {
       
         if(this.passwordEncoder.matches(password,user.getPassword())){
         session.setAttribute("userPrincipal", user);
-          model.setViewName("/verLista");
+          model.setViewName("home");
         return model;
     }else{
               model.setViewName("home");
@@ -300,6 +305,112 @@ public ModelAndView newUser(HttpServletRequest request) {
  
     return model;
 }
+
+
+ @RequestMapping(value = "/summary", method = RequestMethod.GET)
+    public ModelAndView verSummary()
+    {
+        ModelAndView mav=new ModelAndView();
+        String sql="SELECT universidad FROM user";
+        List<String> universidad = new ArrayList<>();
+        Map<String, Tuple<Integer,Integer>> datosFinales = new HashMap<>();
+        
+      List<String> datosUniversidadLista= this.jdbcTemplate.queryForList(sql, String.class);
+       
+       for(String s : datosUniversidadLista){ //Metemos todas las universidades de la BD
+           
+           if(!universidad.contains(s)){
+               universidad.add( s);
+               
+           }
+           
+       }
+       
+       
+       
+       
+       for(String univ : universidad){
+           //Buscamos por cada universidad el numero total que hay
+              String consulta="select count(*) from user where universidad= '" + univ + "';"; //Esta consulta es la que falla
+              Integer datosNumero = this.jdbcTemplate.queryForObject(consulta,Integer.class);
+              String consulta2="select count(activo) from user where universidad= '" + univ + "' AND activo=" + 1 + ";"; //Esta consulta es la que falla
+              Integer datosNumero2 = this.jdbcTemplate.queryForObject(consulta2,Integer.class);
+              Tuple<Integer,Integer> tupla = new Tuple(datosNumero,datosNumero2);
+              
+              datosFinales.put(univ, tupla);
+           
+       }
+       
+       
+       
+        String sql1="SELECT region FROM user";
+        List<String> region = new ArrayList<>();
+        Map<String, Tuple<Integer,Integer>> datosRegion = new HashMap<>();
+        
+      List<String> datosRegionLista= this.jdbcTemplate.queryForList(sql1, String.class);
+       
+       for(String s : datosRegionLista){ //Metemos todas las universidades de la BD
+           
+           if(!region.contains(s)){
+               region.add( s);
+               
+           }
+           
+       }
+       
+       
+       
+       
+       for(String univ : region){
+           //Buscamos por cada universidad el numero total que hay
+               String consulta="select count(*) from user where region= '" + univ + "';"; //Esta consulta es la que falla
+              Integer datosNumero = this.jdbcTemplate.queryForObject(consulta,Integer.class);
+              String consulta2="select count(*) from user where region= '" + univ + "' AND activo= "+ 1 +  ";"; //Esta consulta es la que falla
+              Integer datosNumero2 = this.jdbcTemplate.queryForObject(consulta2,Integer.class);
+              Tuple<Integer,Integer> tupla = new Tuple(datosNumero,datosNumero2);
+              
+              datosRegion.put(univ, tupla);
+           
+       }
+       
+       
+       
+        String sql2="SELECT count(*) FROM user WHERE sexo='" + 'M' + "';";
+   
+        
+       
+  Integer datosMujeres = this.jdbcTemplate.queryForObject(sql2,Integer.class); 
   
+    String sql3="SELECT count(*) FROM user WHERE sexo='" + 'M' + "' AND activo=" + 1 + ";";
+   
+        
+       
+  Integer datosMujeresActivas = this.jdbcTemplate.queryForObject(sql3,Integer.class);   
+  
+     String sql4="SELECT count(*) FROM user";
+   
+        
+       
+  Integer datosTotales = this.jdbcTemplate.queryForObject(sql4,Integer.class);   
+  
+  datosMujeresActivas = (datosMujeresActivas*100)/datosMujeres;
+  datosMujeres = (datosMujeres*100)/datosTotales;
+  
+       
+       
+       
+  
+  
+   Tuple<Integer,Integer> datosMujeresTupla = new Tuple<>(datosMujeres,datosMujeresActivas);
+       
+       // List datos = this.userService.obtenerLista(); //Prueba de UserDao
+        mav.addObject("datosFinales",datosFinales);
+        mav.addObject("datosRegion",datosRegion);
+        mav.addObject("datosMujeres",datosMujeresTupla);
+        mav.setViewName("summary");
+        return mav;
+    }
+         
+
     
 }

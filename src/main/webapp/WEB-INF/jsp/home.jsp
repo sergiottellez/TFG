@@ -14,11 +14,13 @@
 <body>
  <a href='<c:url value="/logout" />'>Logout</a>
  <h1>Welcome 
- <c:if test="${pageContext.request.userPrincipal.name != null }">
- ${pageContext.request.userPrincipal.name }
+ <c:if test="${userPrincipal.name != null }">
+ ${userPrincipal.name }
  </c:if> </h1>
  <br/>
- <a href='<c:url value="/verLista" />'>Listado de socio</a>
+ <a href='<c:url value="/verLista" />'>Listado de Socios</a>
+ 
+ <a href='<c:url value="/summary" />'>Summary</a>
  
  
  <footer>

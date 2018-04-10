@@ -3,7 +3,7 @@ var activa;
 
 function campoBusqueda(elem){
 
-  campoTxt = document.getElementById('busqueda');
+  campoTxt = document.getElementById('tipoListadoNumero');
   switch(elem){
     case "0":
       
@@ -28,6 +28,10 @@ function campoBusqueda(elem){
    
     campoTxt.style.display='block';
      campoTxt.value = "Nombre";
+    break;
+    case "6":
+
+      campoTxt.style.display='none';
     break;
     
   }

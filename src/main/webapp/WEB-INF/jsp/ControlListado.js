@@ -3,7 +3,7 @@ var activa;
 
 function campoBusqueda(elem){
 
-  campoTxt = document.getElementById('tipoListadoNumero');
+  campoTxt = document.getElementById('textoTipoBusqueda');
   switch(elem){
     case "0":
       

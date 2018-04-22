@@ -40,6 +40,19 @@
                 <prop key="newUser">userController</prop>
                 <prop key="home">userController</prop>
                 <prop key="summary">userController</prop>
+                <prop key="/">userController</prop>
+                <prop key="logout">userController</prop>
+                <prop key="saveContactEdit">userController</prop>
+                <prop key="saveContactNew">userController</prop>
+                <prop key="grupoUserP">userController</prop>
+                <prop key="grupoUserP/*">userController</prop>
+                <prop key="verHistorial/*">userController</prop>
+                   <prop key="verHistorial">userController</prop>
+
+
+
+              
+
 
 
 
@@ -60,11 +73,21 @@
     
     
     
-          <bean name="userController" class="controller.UserController" />
+          <bean name="userController" class="controller.UserController"/>
           
        
       
           <bean id="dao" class="dao.UserDaoImpl"/>  
+          
+          
+            <bean id="user"    class="model.User" scope="session"/> 
+                        <bean id="grupo"    class="model.Grupo" scope="session"/>   
+  
+            
+                
+
+  
+
        
         
           

@@ -10,20 +10,7 @@ package model;
  * and open the template in the editor.
  */
 
-
-import java.io.Serializable;
-import java.util.Set;
-
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.Table;
+import java.util.Date;
 import javax.validation.constraints.NotNull;
 
 
@@ -33,19 +20,25 @@ import javax.validation.constraints.NotNull;
  * @author sergiottellez
  */
 
-public class User implements Serializable {
+public class User  {
     
-     private static final long serialVersionUID = 1L;
+     
     
     
-	private int user_id;
+	private String user_id;
+        
+        private Date fecha;
+        
+        private String orcid;
 	
         @NotNull
 	private String email;
         @NotNull
 	private String password;
 
-	private String name;
+	private String nombre;
+        
+       
 
         private String apellido1;
   
@@ -64,10 +57,98 @@ public class User implements Serializable {
         private int activo;
 
         private Integer role;
+        
+        private String sexo;
+        
+        private String dni;
+        
+        private String grupoInvestigacion;
+
+    public Date getFecha() {
+        return fecha;
+    }
+
+    public void setFecha(Date fecha) {
+        this.fecha = fecha;
+    }
+
+    public String getOrcid() {
+        return orcid;
+    }
+
+    public void setOrcid(String orcid) {
+        this.orcid = orcid;
+    }
+
+    public String getGrupoInvestigacion() {
+        return grupoInvestigacion;
+    }
+
+    public void setGrupoInvestigacion(String grupoInvestigacion) {
+        this.grupoInvestigacion = grupoInvestigacion;
+    }
+
+    public String getPais() {
+        return pais;
+    }
+
+    public void setPais(String pais) {
+        this.pais = pais;
+    }
+        
+        private int fundador;
+        
+        private String dblppersonname;
+        
+        private String authorkey;
+        
+        private String pais;
+
+    public String getDblppersonname() {
+        return dblppersonname;
+    }
+
+    public void setDblppersonname(String dblppersonname) {
+        this.dblppersonname = dblppersonname;
+    }
+
+    public String getAuthorkey() {
+        return authorkey;
+    }
+
+    public void setAuthorkey(String authorkey) {
+        this.authorkey = authorkey;
+    }
+
+
+    public String getDni() {
+        return dni;
+    }
+
+    public void setDni(String dni) {
+        this.dni = dni;
+    }
+
+    public int getFundador() {
+        return fundador;
+    }
+
+    public void setFundador(int fundador) {
+        this.fundador = fundador;
+    }
+        
+
+    public String getSexo() {
+        return sexo;
+    }
+
+    public void setSexo(String sexo) {
+        this.sexo = sexo;
+    }
 
     public User() {
     }
-
+    
     public int getAntiguedad() {
         return antiguedad;
     }
@@ -132,17 +213,11 @@ public class User implements Serializable {
         this.universidad = universidad;
     }
 
-
-    
-    
-  
-   
-
-    public Integer getUser_id() {
+    public String getUser_id() {
         return user_id;
     }
 
-    public void setUser_id(Integer user_id) {
+    public void setUser_id(String user_id) {
         this.user_id = user_id;
     }
 
@@ -155,14 +230,16 @@ public class User implements Serializable {
         this.email = email;
     }
 
-  
-    public String getName() {
-        return name;
+    public String getNombre() {
+        return nombre;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
     }
+
+  
+  
 
     public String getPassword() {
         return password;
@@ -188,13 +265,13 @@ public class User implements Serializable {
         this.apellido1 = apellido1;
                 this.apellido2 = apellido2;
 
-        this.name = name;
+        this.nombre = name;
         this.role = role;
         this.password = password;
         
     }
     
-      public User(String email, String apellido1,String apellido2, String name, Integer role, String password,String universidad,String region,Integer empresa,Integer antiguedad,Integer reciente,Integer activo){
+      public User(String email, String apellido1,String apellido2, String name, Integer role, String password,String universidad,String region,Integer empresa,Integer antiguedad,Integer reciente,Integer activo,String sexo){
         
         
         this.email = email;
@@ -205,9 +282,10 @@ public class User implements Serializable {
                 this.antiguedad = antiguedad;
                 this.empresa = empresa;
                 this.region = region;
-        this.name = name;
+        this.nombre = name;
         this.role = role;
         this.password = password;
+        this.sexo = sexo;
         
     }
     

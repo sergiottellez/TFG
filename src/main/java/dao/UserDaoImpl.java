@@ -72,21 +72,31 @@ public class UserDaoImpl implements UserDao {
            
          @Override
         public User mapRow(ResultSet rs, int i) throws SQLException {
-            User e = new User();
-             e.setUser_id(rs.getInt(1));
-    e.setName(rs.getString(2));
-    e.setApellido2(rs.getString(3));
-    e.setApellido1(rs.getString(4));
-    e.setPassword(rs.getString(5));
-    e.setRole(rs.getInt(6));
-    e.setUniversidad(rs.getString(7));
-    e.setRegion(rs.getString(8));
-    e.setEmpresa(rs.getInt(9));
-    e.setAntiguedad(rs.getInt(10));
-    e.setReciente(rs.getInt(11));
-    e.setActivo(rs.getInt(12));
-
+              User e = new User();
+             e.setUser_id(rs.getString(1));
+             e.setFecha(rs.getDate(2));
+             e.setOrcid(rs.getString(3));
+             e.setDni(rs.getString(4));
+             e.setPassword(rs.getString(5));
+        e.setApellido2(rs.getString(6));
+         e.setApellido1(rs.getString(7));
+        e.setNombre(rs.getString(8));
+        e.setSexo(rs.getString(9));
+        e.setDblppersonname(rs.getString(10));
+        e.setAuthorkey(rs.getString(11));
+         e.setRole(rs.getInt(12));
+           e.setUniversidad(rs.getString(13));
+            e.setRegion(rs.getString(14));
+            e.setEmpresa(rs.getInt(15));
+            e.setPais(rs.getString(16));
+        e.setEmail(rs.getString(17));
+     e.setGrupoInvestigacion(rs.getString(18));
+    e.setAntiguedad(rs.getInt(19));
+    e.setReciente(rs.getInt(20));
+    e.setActivo(rs.getInt(21));
+    e.setFundador(rs.getInt(22));
     return e;
+
         }
     });
            
@@ -115,7 +125,7 @@ public class UserDaoImpl implements UserDao {
     @Override
     public void newUser(String email, String password, String name, String apellido1, String apellido2, Integer role) throws DataAccessException{
         User user = new User(email,apellido1,apellido2,name,role, password); //tengo que encriptarlo
-        String sql = "INSERT IGNORE INTO user VALUES (" + user.getUser_id() + ", '" + user.getEmail() + "', '" +user.getApellido1()+ "', '" + user.getName()+ "', '" +user.getPassword() +  "', " + user.getRole() + ";";
+        String sql = "INSERT IGNORE INTO user VALUES (" + user.getUser_id() + ", '" + user.getEmail() + "', '" +user.getApellido1()+ "', '" + user.getNombre()+ "', '" +user.getPassword() +  "', " + user.getRole() + ";";
         // template.update(sql);
         //getEm().getTransaction().begin();
         //Query query = getEm().createQuery(sql);
@@ -130,7 +140,7 @@ public class UserDaoImpl implements UserDao {
         user.setApellido1(apellido1);
           user.setApellido2(apellido2);
 
-        user.setName(name);
+        user.setNombre(name);
         user.setPassword(password); //OJO CON LAS PASSWORD QUE ESTÉN ENCRIPTADAS
        
         user.setRole(role);
@@ -166,25 +176,29 @@ public class UserDaoImpl implements UserDao {
       return template.query(sql, new RowMapper<User>() {
    @Override
    public User mapRow(ResultSet rs, int row) throws SQLException {
-    User e = new User();
-    e.setUser_id(rs.getInt(1));
-    e.setName(rs.getString(2));
-    e.setApellido2(rs.getString(3));
-    e.setApellido1(rs.getString(4));
-    e.setPassword(rs.getString(5));
-    e.setRole(rs.getInt(6));
-    e.setUniversidad(rs.getString(7));
-    e.setRegion(rs.getString(8));
-    e.setEmpresa(rs.getInt(9));
-    e.setAntiguedad(rs.getInt(10));
-    e.setReciente(rs.getInt(11));
-    e.setActivo(rs.getInt(12));
-
-
-
-
-
- 
+       User e = new User();
+             e.setUser_id(rs.getString(1));
+             e.setFecha(rs.getDate(2));
+             e.setOrcid(rs.getString(3));
+             e.setDni(rs.getString(4));
+             e.setPassword(rs.getString(5));
+        e.setApellido2(rs.getString(6));
+         e.setApellido1(rs.getString(7));
+        e.setNombre(rs.getString(8));
+        e.setSexo(rs.getString(9));
+        e.setDblppersonname(rs.getString(10));
+        e.setAuthorkey(rs.getString(11));
+         e.setRole(rs.getInt(12));
+           e.setUniversidad(rs.getString(13));
+            e.setRegion(rs.getString(14));
+            e.setEmpresa(rs.getInt(15));
+            e.setPais(rs.getString(16));
+        e.setEmail(rs.getString(17));
+     e.setGrupoInvestigacion(rs.getString(18));
+    e.setAntiguedad(rs.getInt(19));
+    e.setReciente(rs.getInt(20));
+    e.setActivo(rs.getInt(21));
+    e.setFundador(rs.getInt(22));
     return e;
    }
 
@@ -204,19 +218,29 @@ public class UserDaoImpl implements UserDao {
          return template.query(sql, new RowMapper<User>() {
    @Override
    public User mapRow(ResultSet rs, int row) throws SQLException {
-    User e = new User();
-     e.setUser_id(rs.getInt(1));
-    e.setName(rs.getString(2));
-    e.setApellido2(rs.getString(3));
-    e.setApellido1(rs.getString(4));
-    e.setPassword(rs.getString(5));
-    e.setRole(rs.getInt(6));
-    e.setUniversidad(rs.getString(7));
-    e.setRegion(rs.getString(8));
-    e.setEmpresa(rs.getInt(9));
-    e.setAntiguedad(rs.getInt(10));
-    e.setReciente(rs.getInt(11));
-    e.setActivo(rs.getInt(12));
+       User e = new User();
+             e.setUser_id(rs.getString(1));
+             e.setFecha(rs.getDate(2));
+             e.setOrcid(rs.getString(3));
+             e.setDni(rs.getString(4));
+             e.setPassword(rs.getString(5));
+        e.setApellido2(rs.getString(6));
+         e.setApellido1(rs.getString(7));
+        e.setNombre(rs.getString(8));
+        e.setSexo(rs.getString(9));
+        e.setDblppersonname(rs.getString(10));
+        e.setAuthorkey(rs.getString(11));
+         e.setRole(rs.getInt(12));
+           e.setUniversidad(rs.getString(13));
+            e.setRegion(rs.getString(14));
+            e.setEmpresa(rs.getInt(15));
+            e.setPais(rs.getString(16));
+        e.setEmail(rs.getString(17));
+     e.setGrupoInvestigacion(rs.getString(18));
+    e.setAntiguedad(rs.getInt(19));
+    e.setReciente(rs.getInt(20));
+    e.setActivo(rs.getInt(21));
+    e.setFundador(rs.getInt(22));
     return e;
    }
 
@@ -244,20 +268,29 @@ public class UserDaoImpl implements UserDao {
         return template.query(sql, new RowMapper<User>() {
    @Override
    public User mapRow(ResultSet rs, int row) throws SQLException {
-    User e = new User();
-      e.setUser_id(rs.getInt(1));
-    e.setName(rs.getString(2));
-    e.setApellido2(rs.getString(3));
-    e.setApellido1(rs.getString(4));
-    e.setPassword(rs.getString(5));
-    e.setRole(rs.getInt(6));
-    e.setUniversidad(rs.getString(7));
-    e.setRegion(rs.getString(8));
-    e.setEmpresa(rs.getInt(9));
-    e.setAntiguedad(rs.getInt(10));
-    e.setReciente(rs.getInt(11));
-    e.setActivo(rs.getInt(12));
- 
+      User e = new User();
+             e.setUser_id(rs.getString(1));
+             e.setFecha(rs.getDate(2));
+             e.setOrcid(rs.getString(3));
+             e.setDni(rs.getString(4));
+             e.setPassword(rs.getString(5));
+        e.setApellido2(rs.getString(6));
+         e.setApellido1(rs.getString(7));
+        e.setNombre(rs.getString(8));
+        e.setSexo(rs.getString(9));
+        e.setDblppersonname(rs.getString(10));
+        e.setAuthorkey(rs.getString(11));
+         e.setRole(rs.getInt(12));
+           e.setUniversidad(rs.getString(13));
+            e.setRegion(rs.getString(14));
+            e.setEmpresa(rs.getInt(15));
+            e.setPais(rs.getString(16));
+        e.setEmail(rs.getString(17));
+     e.setGrupoInvestigacion(rs.getString(18));
+    e.setAntiguedad(rs.getInt(19));
+    e.setReciente(rs.getInt(20));
+    e.setActivo(rs.getInt(21));
+    e.setFundador(rs.getInt(22));
     return e;
    }
 
@@ -279,20 +312,29 @@ public class UserDaoImpl implements UserDao {
         return template.query(sql, new RowMapper<User>() {
    @Override
    public User mapRow(ResultSet rs, int row) throws SQLException {
-    User e = new User();
-      e.setUser_id(rs.getInt(1));
-    e.setName(rs.getString(2));
-    e.setApellido2(rs.getString(3));
-    e.setApellido1(rs.getString(4));
-    e.setPassword(rs.getString(5));
-    e.setRole(rs.getInt(6));
-    e.setUniversidad(rs.getString(7));
-    e.setRegion(rs.getString(8));
-    e.setEmpresa(rs.getInt(9));
-    e.setAntiguedad(rs.getInt(10));
-    e.setReciente(rs.getInt(11));
-    e.setActivo(rs.getInt(12));
- 
+        User e = new User();
+             e.setUser_id(rs.getString(1));
+             e.setFecha(rs.getDate(2));
+             e.setOrcid(rs.getString(3));
+             e.setDni(rs.getString(4));
+             e.setPassword(rs.getString(5));
+        e.setApellido2(rs.getString(6));
+         e.setApellido1(rs.getString(7));
+        e.setNombre(rs.getString(8));
+        e.setSexo(rs.getString(9));
+        e.setDblppersonname(rs.getString(10));
+        e.setAuthorkey(rs.getString(11));
+         e.setRole(rs.getInt(12));
+           e.setUniversidad(rs.getString(13));
+            e.setRegion(rs.getString(14));
+            e.setEmpresa(rs.getInt(15));
+            e.setPais(rs.getString(16));
+        e.setEmail(rs.getString(17));
+     e.setGrupoInvestigacion(rs.getString(18));
+    e.setAntiguedad(rs.getInt(19));
+    e.setReciente(rs.getInt(20));
+    e.setActivo(rs.getInt(21));
+    e.setFundador(rs.getInt(22));
     return e;
    }
 
@@ -315,7 +357,7 @@ public class UserDaoImpl implements UserDao {
     @Transactional(readOnly =false)
     @Override
     public void edit(User user) throws DataAccessException {
-        String sql = "UPDATE user SET email='" + user.getEmail() + "', name='" + user.getName() + "', apellido1 '" + user.getApellido1() + "', role=" + user.getRole() + ", password='" + user.getPassword() + "' WHERE user_id='" + user.getUser_id() + "';";
+        String sql = "UPDATE user SET email='" + user.getEmail() + "', name='" + user.getNombre() + "', apellido1 '" + user.getApellido1() + "', role=" + user.getRole() + ", password='" + user.getPassword() + "' WHERE user_id='" + user.getUser_id() + "';";
      template.update(sql);
        // em.getTransaction().begin();
        // Query query = getEm().createQuery(sql);
@@ -329,24 +371,15 @@ public class UserDaoImpl implements UserDao {
        //Query query = getEm().createQuery(sql);
        return template.queryForObject(sql,  new BeanPropertyRowMapper<User>(User.class));
     }
-    
+
     @Override
     public void saveOrUpdate(User contact) {
-    if (contact.getUser_id() > 0) {
-        // update
-        String sql = "UPDATE contact SET name=?, email=?, apellido1=?,apellido2=?,role=?,universidad=?,region=?,empresa=?,antiguedad=?,reciente=?,activo=? WHERE contact_id=?";
-        template.update(sql, contact.getName(), contact.getEmail(),
-                contact.getApellido1(), contact.getApellido2(), contact.getRole(),contact.getUniversidad(),contact.getRegion(),contact.getEmpresa(),contact.getAntiguedad(),contact.getReciente(),contact.getActivo(),contact.getUser_id());
-    } else {
-        // insert
-        String sql = "INSERT INTO contact (name, email, apellido1, apellido2,role,universidad,region,empresa,antiguedad,reciente,activo)"
-                    + " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        template.update(sql, contact.getName(), contact.getEmail(),
-                contact.getApellido1(), contact.getApellido2(), contact.getRole(),contact.getUniversidad(),contact.getRegion(),contact.getEmpresa(),contact.getAntiguedad(),contact.getReciente(),contact.getActivo());
-   
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+    
+   
  
-}
+
 
 
 }

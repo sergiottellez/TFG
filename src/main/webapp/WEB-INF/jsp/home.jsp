@@ -9,19 +9,35 @@
         <link rel="shortcut icon" href="https://cdn.rawgit.com/sergiottellez/TFG/289ded45/src/main/webapp/WEB-INF/jsp/images/logo069_400x400.ico">
 
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+
+ <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+ <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+ <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <title>Home</title>
 </head>
 <body>
- <a href='<c:url value="/logout" />'>Logout</a>
- <h1>Welcome 
- <c:if test="${userPrincipal.name != null }">
- ${userPrincipal.name }
+  
+    
+        
+        
+              <a id="logout" href="/TFGPruebaFinal/logout"   class="btn btn-default btn-sm"> <i class="glyphicon glyphicon-log-out"></i>Logout </a>
+   
+
+    <h1 style="text-align:center;">Welcome 
+ <c:if test="${user.nombre != null }">
+ ${user.nombre }
  </c:if> </h1>
  <br/>
- <a href='<c:url value="/verLista" />'>Listado de Socios</a>
+<div class="trans text-center"> 
+ <a href='<c:url value="/verLista" />' class="btn btn-info  btninter centrado">Listado de Socios</a>
  
- <a href='<c:url value="/summary" />'>Summary</a>
+ <a href='<c:url value="/summary" />' class="btn btn-info  btninter centrado">Summary</a>
+ </div>
  
+ 
+ <br/>
+   
  
  <footer>
         <div class='define'>

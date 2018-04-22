@@ -24,12 +24,30 @@
  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
 <body>
+    
+              <a id="logout" href="/TFGPruebaFinal/logout"   class="btn btn-default btn-sm"> <i class="glyphicon glyphicon-log-out"></i>Logout </a>
+
+    
+    
 <div class="container-fluid">
   <div class="row-fluid">
    <div class="col-md-6">
     <h4 class="text-center">Agregar Nuevo Socio</h4>
     <hr>
-    <form:form action="saveContact" method="POST" modelAttribute="contact">
+    <form:form action="saveContactNew" method="POST" modelAttribute="contacto">
+        
+       
+      
+   
+
+        
+        
+        <div class="form-group">
+      <label for = "dni"> DNI: </label>
+  <form:input path="dni" class="form-control" readonly="true" /> 
+   
+
+        
       <div class="form-group">
       <label for = "name"> Nombre: </label>
       <form:input path="name" class="form-control"/>
@@ -48,7 +66,8 @@
      </div>
      <div class="form-group">
       <label for = "password">Password: </label>
-      <form:input  path="password" showPassword="false"  class="form-control"/>
+      <form:input type="password" id="password" onclick="seleccionar()"  path="password" showPassword="false"   class="form-control"/>
+
      </div>
      <div class="form-group">
       <label for = "role">Rol (admin o usuario normal): </label> 
@@ -63,6 +82,21 @@
      <div class="form-group">
       <label for = "region">Región: </label>
       <form:input path="region" class="form-control"/>
+     </div>
+     
+     <div class="form-group">
+      <label for = "dblppersonname">Dblppersonname: </label>
+      <form:input path="dblppersonname" class="form-control"/>
+     </div>
+     
+     <div class="form-group">
+      <label for = "authorkey">Author key: </label>
+      <form:input path="authorkey" class="form-control"/>
+     </div>
+     
+     <div class="form-group">
+      <label for = "foreigner">Foreigner: </label>
+      <form:input path="foreigner" class="form-control"/>
      </div>
      
      <div class="form-group">
@@ -83,6 +117,17 @@
      <div class="form-group">
       <label for = "activo">Socio activo: </label>
       <form:input path="activo" class="form-control"/> SÍ = 1
+     </div>
+     
+      <div class="form-group">
+      <label for = "sexo">Sexo: </label>
+      <form:input path="sexo" class="form-control"/> V o M
+     </div>
+     
+      <div class="form-group">
+      <label for = "fundador">Fundador: </label>
+     <form:input path="fundador" class="form-control"/> SÍ=1
+ 
      </div>
      
      <div class="form-group">

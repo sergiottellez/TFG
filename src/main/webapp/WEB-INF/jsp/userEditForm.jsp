@@ -3,8 +3,9 @@
     Created on : 17-mar-2018, 15:51:18
     Author     : sergiottellez
 --%>
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
     "http://www.w3.org/TR/html4/loose.dtd">
 
@@ -22,26 +23,55 @@
  <script src="https://cdn.rawgit.com/sergiottellez/TFG/cca09cdb/src/main/webapp/WEB-INF/jsp/seleccionar.js"></script>
 </head>
 <body>
+    
+              <a id="logout" href="/TFGPruebaFinal/logout"   class="btn btn-default btn-sm"> <i class="glyphicon glyphicon-log-out"></i>Logout </a>
+
 <div class="container-fluid">
   <div class="row-fluid">
    <div class="col-md-6">
     <h4 class="text-center">Editar Socio</h4>
     <hr>
-    <form:form action="saveContact" method="POST" modelAttribute="contact">
+    <form:form action="saveContactEdit" method="POST"  modelAttribute="contacto">
         
-        <form:hidden path="user_id"/>
+        <div class="form-group">
+      <label for = "user_id"> ID: </label>
+  <form:input path="user_id" class="form-control" readonly="true" /> 
+   
+
+        </div>
+        
+        <div class="form-group">
+      <label for = "dni"> DNI: </label>
+  <form:input path="dni" class="form-control" readonly="true" /> 
+   
+
+        </div>
+        
+        
       <div class="form-group">
-      <label for = "name"> Nombre: </label>
-      <form:input path="name" class="form-control"/>
+      <label for = "nombre"> Nombre: </label>
+      <form:input path="nombre" class="form-control"/>
      </div>
      <div class="form-group">
-      <label for = "apellido1">Apellido 1: </label>
+      <label for = "apellido1">1er Apellido: </label>
       <form:input path="apellido1" class="form-control"/>
      </div>
      <div class="form-group">
-      <label for = "apellido2">Apellido 2: </label>
+      <label for = "apellido2">2º Apellido: </label>
       <form:input path="apellido2" class="form-control"/>
      </div>
+       
+     <div class="form-group">
+      <label for = "sexo">Sexo: </label>
+      <form:select id="sexo" path="sexo" class="form-control" required="required" >
+            <form:option value="V">V</form:option>
+            <form:option value="M">M</form:option>
+            
+     </form:select>
+
+      
+     </div>
+     
      <div class="form-group">
       <label for ="email">Email</label>
       <form:input path="email" class="form-control"/>
@@ -52,7 +82,9 @@
      </div>
      <div class="form-group">
       <label for = "role">Rol (admin o usuario normal): </label> 
-      <form:input path="role" class="form-control"/> ADMIN = 1
+            <c:if test="${sessionScope.user.role == 1}" ><form:input path="role" class="form-control"/> ADMIN= 1 </c:if>
+
+            <c:if test="${sessionScope.user.role==0}"><form:input path="role" class="form-control" readonly="true"/> ADMIN = 1</c:if>
      </div>
      
      <div class="form-group">
@@ -62,8 +94,31 @@
      
      <div class="form-group">
       <label for = "region">Región: </label>
-      <form:input path="region" class="form-control"/>
+        <form:select path="region">
+         <form:options items="${region}" />
+        </form:select>
      </div>
+     
+     <div class="form-group">
+      <label for = "dblppersonname">Dblppersonname: </label>
+      <form:input path="dblppersonname" class="form-control"/>
+     </div>
+     
+     <div class="form-group">
+      <label for = "authorkey">Author key: </label>
+      <form:input path="authorkey" class="form-control"/>
+     </div>
+     
+     <div class="form-group">
+      <label for = "pais">País: </label>
+      <form:input path="pais" class="form-control"/>
+     </div>
+     
+     <div class="form-group">
+      <label for = "grupoInvestigacion">Grupo: </label>
+      <form:input path="grupoInvestigacion" class="form-control"/>
+     </div>
+     
      
      <div class="form-group">
       <label for = "empresa">Pertenece a empresa: </label>
@@ -72,17 +127,27 @@
      
      <div class="form-group">
       <label for = "antiguedad">Año antigüedad: </label>
-      <form:input path="antiguedad" class="form-control"/>
+      <form:input path="antiguedad" class="form-control" readonly="true"/>
      </div>
      
      <div class="form-group">
       <label for = "reciente">Reciente: </label>
-      <form:input path="reciente" class="form-control"/> Año última aparición
+      <c:if test="${sessionScope.user.role == 1}" ><form:input path="reciente" class="form-control"/> </c:if>Año última aparición 
+      <c:if test="${sessionScope.user.role == 0}" ><form:input path="reciente" class="form-control" readonly="true"/> </c:if>
+
      </div>
      
      <div class="form-group">
       <label for = "activo">Socio activo: </label>
-      <form:input path="activo" class="form-control"/> SÍ = 1
+ <c:if test="${sessionScope.user.role == 1}" ><form:input path="activo" class="form-control"/> SÍ=1</c:if>
+      <c:if test="${sessionScope.user.role == 0}" ><form:input path="activo" class="form-control" readonly="true"/>SÍ=1</c:if>
+     </div>
+     
+     <div class="form-group">
+      <label for = "fundador">Fundador: </label>
+      <c:if test="${sessionScope.user.role == 1}" ><form:input path="fundador" class="form-control"/> SÍ=1</c:if>
+      <c:if test="${sessionScope.user.role == 0}" ><form:input path="fundador" class="form-control" readonly="true"/>SÍ=1</c:if>
+ 
      </div>
      
      <div class="form-group">

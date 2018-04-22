@@ -73,6 +73,7 @@
    <table class="table table-bordered table-striped">
     <thead>
     <tr>
+        <th>Fecha</th>
      <th>Email</th>
      <th>Nombre</th>
      <th>Apellido1</th>
@@ -85,15 +86,13 @@
      <th>Antiguedad</th>
      <th>Reciente</th>
      <th>Activo</th>
-          <c:if test="${sessionScope.user.role == 1}" > <th>Historico</th> </c:if>
 
-     <c:if test="${sessionScope.user.role == 1}" > <th>Editar</th> </c:if>
-      <c:if test="${sessionScope.user.role == 1}" > <th>Eliminar</th></c:if>
     </tr>
     </thead>
     <tbody>
-    <c:forEach var="users" items="${datos}">
+    <c:forEach var="users" items="${historial}">
      <tr>
+      <c:if test="${sessionScope.user.role == 1 ||sessionScope.user.email.equals(users.email)}" > <td><c:out value="${users.fecha}"/></td></c:if>   
       <c:if test="${sessionScope.user.role == 1 ||sessionScope.user.email.equals(users.email)}" > <td><c:out value="${users.email}"/></td></c:if>
       <c:if test="${sessionScope.user.role == 1 ||sessionScope.user.email.equals(users.email)}" ><td><c:out value="${users.nombre}"/> </td></c:if>
       <c:if test="${sessionScope.user.role == 1 ||sessionScope.user.email.equals(users.email)}" ><td><c:out value="${users.apellido1}"/></td></c:if>
@@ -108,19 +107,16 @@
       <c:if test="${sessionScope.user.role == 1 ||sessionScope.user.email.equals(users.email)}" ><td><c:out value="${users.activo}"/></td></c:if>
 
       
-            <c:if test="${user.role == 1}" > <td><a href="verHistorial?id=${users.user_id}" class="btn btn-primary btn-xs"><i class="glyphicon glyphicon-book"></i> Historial</a></td></c:if>
 
-      <c:if test="${user.role == 1}" > <td><a href="editUser?id=${users.email}" class="btn btn-info btn-xs"><i class="glyphicon glyphicon-check"></i> Editar</a></td></c:if>
-      <c:if test="${user.role == 1}" ><td><a href="deleteUser?id=${users.user_id}" class="btn btn-danger btn-xs"><i class="glyphicon glyphicon-trash" onClick="return confirmar()"></i> Eliminar</a></td> </c:if>
      </tr>
     </c:forEach>    
     </tbody>
    </table>
    <br />
-   <c:if test="${user.role == 1}" > <a href="newUser" class="btn btn-success" >
- <i class="glyphicon glyphicon-edit"></i> Nuevo Socio</a> </c:if> 
-  <c:if test="${user.role == 1}" >  <a href="importExcel" class="btn btn-success"><i class="glyphicon glyphicon-edit"></i>Importar desde Excel   </a> </c:if> 
+  
    <a href="summary" class="btn btn-success"><i class="glyphicon glyphicon-edit"></i>Summary </a>
+   <a href="home" class="btn btn-success"><i class="glyphicon glyphicon-edit"></i>Home </a>
+
 <br/>
 <br/>
 

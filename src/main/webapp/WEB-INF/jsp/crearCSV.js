@@ -29,7 +29,7 @@ function crearCSV(){
       var link = document.createElement("a");
       link.download = "archivo.csv";
       link.href = "data:application/csv," + escape(datos);
-      link.click;
+      link.click();
                     
 }       
 

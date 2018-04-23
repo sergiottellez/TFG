@@ -48,6 +48,37 @@ function exportTableToCSV(filename) {
     downloadCSV(csv.join("n"), filename);
 }
 
+function crearCSV(){
+    
+    
+    
+    var tablehtml = document.getElementById("tabletocsv").innerHTML;
+    
+    
+    var datos = tablehtml.replace(/<thead>/g,'')
+                            .replace(/<\/thead>/g,'')
+                            .replace(/<tbody>/g,'')
+                            .replace(/<\/tbody>/g,'')
+                            .replace(/<tr>/g,'')
+                            .replace(/<\/tr>/g,'\r\n')
+                            .replace(/<th>/g,'')
+                            .replace(/<\/th>/g,';')
+                            .replace(/<td>/g,'')
+                            .replace(/<\/td>/g,';')
+                            .replace(/\t/g,'')
+                            .replace(/\n/g,'');
+                    
+      var link = document.createElement("a");
+      link.download = "archivo.csv";
+      link.href = "data:application/csv," + escape(datos);
+      link.click;
+                    
+}       
+
+
+
+
+
 function ExportToExcel(htmlExport) {
     var ua = window.navigator.userAgent;
     var msie = ua.indexOf("MSIE ");

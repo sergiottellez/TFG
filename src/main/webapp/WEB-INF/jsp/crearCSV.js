@@ -25,8 +25,8 @@ function crearCSV(){
                             .replace(/<\/td>/g,';')
                             .replace(/\t/g,'')
                             .replace(/\n/g,'')
-                            .replace(/<a\b[^>]*>/i,'')
-                            .replace(/<\/a>/i, '')
+                            .replace(/<a\b[^>]*>/i,"")
+                            .replace(/<\/a>/i, "")
                             .replace(/<a\b[^>]>(.?)<\/a>/i,'') 
                             .replace(/<a\b[^>]>(.?)<\/a>/i,'')
                             .replace(/<\/a\b[^>]>(.?)<\/a>/i,'');

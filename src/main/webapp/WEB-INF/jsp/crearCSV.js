@@ -24,7 +24,9 @@ function crearCSV(){
                             .replace(/<td>/g,'')
                             .replace(/<\/td>/g,';')
                             .replace(/\t/g,'')
-                            .replace(/\n/g,'');
+                            .replace(/\n/g,'')
+                                 .replace(/<a>/g,'')
+                            .replace(/<\/a>/g,'');
                     
       var link = document.createElement("a");
       link.download = "archivo.csv";

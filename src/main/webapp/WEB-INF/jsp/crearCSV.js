@@ -25,11 +25,11 @@ function crearCSV(){
                             .replace(/<\/td>/g,';')
                             .replace(/\t/g,'')
                             .replace(/\n/g,'')
-                                 .replace(/<a>/g,'')
-                            .replace(/<\/a>/g,'');
+                             .replace(/<a href>/g,'')
+                            .replace(/<\/a href>/g,'');
                     
       var link = document.createElement("a");
-      link.download = "archivo.csv";
+      link.download = "socios.csv";
       link.href = "data:application/csv," + escape(datos);
       link.click();
             //pruebaaaaa        

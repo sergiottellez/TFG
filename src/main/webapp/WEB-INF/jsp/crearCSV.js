@@ -25,9 +25,9 @@ function crearCSV(){
                             .replace(/<\/td>/g,';')
                             .replace(/\t/g,'')
                             .replace(/\n/g,'')
-                            .replace(/<a\b[^>]*>/i,"")
-                            .replace(/<\/a>/i, "")
-                            .replace(/<a\b[^>]*>(.*?)<\/a>/i,'');
+                            .replace(/<a\b[^>]*>/g,"")
+                            .replace(/<\/a>/g, "")
+                            .replace(/<a\b[^>]*>(.*?)<\/a>/g,'');
       var link = document.createElement("a");
       link.download = "socios.csv";
       link.href = "data:application/csv," + escape(datos);

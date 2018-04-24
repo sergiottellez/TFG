@@ -22,10 +22,10 @@ function crearCSV(){
                             .replace(/<th>/g,'')
                             .replace(/<\/th>/g,';')
                             .replace(/<td>/g,'')
+                            .replace(/<a\b[^>]>(.?)<\/a>/i,'')
                             .replace(/<\/td>/g,';')
                             .replace(/\t/g,'')
-                            .replace(/\n/g,'')
-                             .replace(/<a\b[^>]>(.?)<\/a>/i,'');                    
+                            .replace(/\n/g,'');                  
       var link = document.createElement("a");
       link.download = "socios.csv";
       link.href = "data:application/csv," + escape(datos);

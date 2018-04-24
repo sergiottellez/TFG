@@ -37,20 +37,24 @@
     <form:form action="saveContactNew" method="POST" modelAttribute="contacto">
         
        
-      
+       <div class="form-group">
+      <label for = "user_id"> ID: </label>
+  <form:input path="user_id" class="form-control"  /> 
+   
+
    
 
         
         
         <div class="form-group">
       <label for = "dni"> DNI: </label>
-  <form:input path="dni" class="form-control" readonly="true" /> 
+  <form:input path="dni" class="form-control"  /> 
    
 
         
       <div class="form-group">
-      <label for = "name"> Nombre: </label>
-      <form:input path="name" class="form-control"/>
+      <label for = "nombre"> Nombre: </label>
+      <form:input path="nombre" class="form-control"/>
      </div>
      <div class="form-group">
       <label for = "apellido1">Apellido 1: </label>
@@ -60,6 +64,17 @@
       <label for = "apellido2">Apellido 2: </label>
       <form:input path="apellido2" class="form-control"/>
      </div>
+     
+        <div class="form-group">
+      <label for = "sexo">Sexo: </label>
+      <form:select path="sexo" class="form-control"> V o M
+          <form:option value="V"> V </form:option>
+                    <form:option value="M"> M </form:option>
+
+          
+      </form:select>
+     </div>
+     
      <div class="form-group">
       <label for ="email">Email</label>
       <form:input path="email" class="form-control"/>
@@ -71,7 +86,12 @@
      </div>
      <div class="form-group">
       <label for = "role">Rol (admin o usuario normal): </label> 
-      <form:input path="role" class="form-control"/> ADMIN = 1
+      <form:select path="role" class="form-control"> 
+          <form:option value="1"> Admin </form:option>
+                    <form:option value="0"> Socio </form:option>
+
+          
+      </form:select>
      </div>
      
      <div class="form-group">
@@ -79,10 +99,13 @@
       <form:input path="universidad" class="form-control"/>
      </div>
      
-     <div class="form-group">
+        <div class="form-group">
       <label for = "region">Región: </label>
-      <form:input path="region" class="form-control"/>
+        <form:select path="region">
+         <form:options items="${region}" />
+        </form:select>
      </div>
+     
      
      <div class="form-group">
       <label for = "dblppersonname">Dblppersonname: </label>
@@ -95,13 +118,18 @@
      </div>
      
      <div class="form-group">
-      <label for = "foreigner">Foreigner: </label>
-      <form:input path="foreigner" class="form-control"/>
+      <label for = "pais">País </label>
+      <form:input path="pais" class="form-control"/>
      </div>
      
      <div class="form-group">
       <label for = "empresa">Pertenece a empresa: </label>
-      <form:input path="empresa" class="form-control"/> SÍ = 1
+      <form:select path="empresa" class="form-control"> 
+          <form:option value="1"> Sí </form:option>
+                    <form:option value="0"> No </form:option>
+
+          
+      </form:select>
      </div>
      
      <div class="form-group">
@@ -116,17 +144,24 @@
      
      <div class="form-group">
       <label for = "activo">Socio activo: </label>
-      <form:input path="activo" class="form-control"/> SÍ = 1
+      
+       <form:select path="activo" class="form-control"> 
+          <form:option value="1"> Sí </form:option>
+                    <form:option value="0"> No </form:option>
+
+          
+      </form:select>
      </div>
      
-      <div class="form-group">
-      <label for = "sexo">Sexo: </label>
-      <form:input path="sexo" class="form-control"/> V o M
-     </div>
-     
+   
       <div class="form-group">
       <label for = "fundador">Fundador: </label>
-     <form:input path="fundador" class="form-control"/> SÍ=1
+      <form:select path="fundador" class="form-control"> 
+          <form:option value="1"> Sí </form:option>
+                    <form:option value="0"> No </form:option>
+
+          
+      </form:select>
  
      </div>
      

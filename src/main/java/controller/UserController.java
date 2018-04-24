@@ -296,9 +296,9 @@ public class UserController {
  }
  
  @RequestMapping(value="/login", method=RequestMethod.POST)
- public ModelAndView verifyLogin(@RequestParam String email,@RequestParam String password,HttpSession session){
+ public ModelAndView verifyLogin(@RequestParam String dni,@RequestParam String password,HttpSession session){
      
-       String sql = "SELECT * from user WHERE email = '" + email + "' AND actual=1";
+       String sql = "SELECT * from user WHERE dni = '" + dni + "' AND actual=1";
        //Query query = getEm().createQuery(sql);
         user =  this.jdbcTemplate.queryForObject(sql, new RowMapper<User>(){
             
@@ -391,14 +391,14 @@ public ModelAndView editUser(HttpServletRequest request,HttpSession session) {
     
     
     
-    String sql = "SELECT nombreReg from regionEsp;";
+    String sql = "SELECT nombreReg from regionEsp ORDER BY nombreReg;";
     List<String> region = this.jdbcTemplate.queryForList(sql, String.class);
     model.addObject("region",region);
  
     return model;
 }
   public User findById(String email) throws DataAccessException {
-      String sql = "SELECT * from user WHERE email = '" + email + "';";
+      String sql = "SELECT * from user WHERE email = '" + email + "' AND actual=1;";
        //Query query = getEm().createQuery(sql);
        User userN =  this.jdbcTemplate.queryForObject(sql, new RowMapper<User>(){
             
@@ -511,6 +511,9 @@ public ModelAndView newUser(HttpServletRequest request) {
    
     ModelAndView model = new ModelAndView("userNewForm");
     model.addObject("contacto", newContact);
+    String sql = "SELECT nombreReg from regionEsp;";
+    List<String> region = this.jdbcTemplate.queryForList(sql, String.class);
+    model.addObject("region",region);
  
     return model;
 }
@@ -658,6 +661,10 @@ public ModelAndView saveContact(@Valid @ModelAttribute("contacto") User contacto
     
     Grupo grupo = this.findByNombreGrupo(contacto.getGrupoInvestigacion());
     Date fecha = new Date();
+    
+    if(grupo == null){
+        contacto.setGrupoInvestigacion(null);
+    }
   
         String sql1 = "SELECT * from user WHERE user_id = " + contacto.getUser_id() + ";";
        //Query query = getEm().createQuery(sql);
@@ -736,15 +743,19 @@ public ModelAndView saveContact(@Valid @ModelAttribute("contacto") User contacto
         Date fecha = new Date();
         
         
+        if(grupo == null){
+            contacto.setGrupoInvestigacion(null);
+        }
+        
      
        
         
-    String sql = "INSERT INTO user (fecha,dni,password,apellido2,apellido1,nombre,sexo,dblppersonname,authorkey,role,universidad,region,empresa,pais,email,grupoInvestigacion,antiguedad,reciente,activo,fundador,actual)"
-                    + " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?,?)";
-        jdbcTemplate.update(sql,fecha,contacto.getDni(),  this.passwordEncoder.encode(contacto.getPassword()),
+    String sql = "INSERT INTO user (user_id,orcid,fecha,dni,password,apellido2,apellido1,nombre,sexo,dblppersonname,authorkey,role,universidad,region,empresa,pais,email,grupoInvestigacion,antiguedad,reciente,activo,fundador,actual)"
+                    + " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)";
+        jdbcTemplate.update(sql,contacto.getUser_id(),contacto.getOrcid(),fecha,contacto.getDni(),  this.passwordEncoder.encode(contacto.getPassword()),
                 contacto.getApellido2(), contacto.getApellido1(),contacto.getNombre(),
                 contacto.getSexo(),contacto.getDblppersonname(),contacto.getAuthorkey(),contacto.getRole(),
-                contacto.getUniversidad(),contacto.getRegion(),contacto.getEmpresa(),contacto.getPais(),contacto.getEmail(),grupo.getNombre(),contacto.getAntiguedad(),
+                contacto.getUniversidad(),contacto.getRegion(),contacto.getEmpresa(),contacto.getPais(),contacto.getEmail(),contacto.getGrupoInvestigacion(),contacto.getAntiguedad(),
                 contacto.getReciente(),contacto.getActivo(),contacto.getFundador(),1);
    
         

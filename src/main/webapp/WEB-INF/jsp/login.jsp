@@ -36,7 +36,7 @@
 			<h3 class="form-signin-heading" th:text="Welcome"> Bienvenido</h3>
 			<br/>
 			 
-			<input type="text" id="email" name="email"  placeholder="Email"
+			<input type="text" id="dni" name="dni"  placeholder="DNI"
 				class="form-control" /> <br/> 
 			<input type="password"  placeholder="Password"
 				id="password" name="password" class="form-control" /> <br /> 

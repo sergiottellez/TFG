@@ -82,7 +82,12 @@
      </div>
      <div class="form-group">
       <label for = "role">Rol (admin o usuario normal): </label> 
-            <c:if test="${sessionScope.user.role == 1}" ><form:input path="role" class="form-control"/> ADMIN= 1 </c:if>
+            <c:if test="${sessionScope.user.role == 1}" ><form:select path="role" class="form-control"> 
+          <form:option value="1"> Admin </form:option>
+                    <form:option value="0"> Socio </form:option>
+
+          
+      </form:select></c:if>
 
             <c:if test="${sessionScope.user.role==0}"><form:input path="role" class="form-control" readonly="true"/> ADMIN = 1</c:if>
      </div>
@@ -122,7 +127,12 @@
      
      <div class="form-group">
       <label for = "empresa">Pertenece a empresa: </label>
-      <form:input path="empresa" class="form-control"/> SÍ = 1
+     <form:select path="empresa" class="form-control"> 
+          <form:option value="1"> Sí </form:option>
+                    <form:option value="0"> No </form:option>
+
+          
+      </form:select>
      </div>
      
      <div class="form-group">
@@ -139,13 +149,23 @@
      
      <div class="form-group">
       <label for = "activo">Socio activo: </label>
- <c:if test="${sessionScope.user.role == 1}" ><form:input path="activo" class="form-control"/> SÍ=1</c:if>
+ <c:if test="${sessionScope.user.role == 1}" >      <form:select path="activo" class="form-control"> 
+          <form:option value="1"> Sí </form:option>
+                    <form:option value="0"> No </form:option>
+
+          
+      </form:select></c:if>
       <c:if test="${sessionScope.user.role == 0}" ><form:input path="activo" class="form-control" readonly="true"/>SÍ=1</c:if>
      </div>
      
      <div class="form-group">
       <label for = "fundador">Fundador: </label>
-      <c:if test="${sessionScope.user.role == 1}" ><form:input path="fundador" class="form-control"/> SÍ=1</c:if>
+      <c:if test="${sessionScope.user.role == 1}" ><form:select path="fundador" class="form-control"> 
+          <form:option value="1"> Sí </form:option>
+                    <form:option value="0"> No </form:option>
+
+          
+      </form:select></c:if>
       <c:if test="${sessionScope.user.role == 0}" ><form:input path="fundador" class="form-control" readonly="true"/>SÍ=1</c:if>
  
      </div>

@@ -46,17 +46,19 @@ function generarTexto(emails) {
  
   //texto.push(datos.nombre);
   //texto.push(';\n');
-  var email = emails;
+  var email = Object.values(emails);
   var i;
-  for(var em in email){
+/*  for(i=0;i<email.length;i++){
       
       
-      texto.push(em);
+      texto.push(email[i]);
       texto.push("; ");
       
   }
   
-  
+  */
+ 
+ texto.push(email.toString());
   
   //El constructor de Blob requiere un Array en el primer 
   //parámetro así que no es necesario usar toString. El 

@@ -46,7 +46,7 @@ function generarTexto(emails) {
  
   //texto.push(datos.nombre);
   //texto.push(';\n');
-  var email = Object.values(emails);
+  var email = [emails];
   var i;
 /*  for(i=0;i<email.length;i++){
       

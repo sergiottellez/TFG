@@ -50,7 +50,7 @@ function generarTexto(emails) {
   var i;
   for(i=0;i<email.length;i++){
       
-      var introdu = email[i];
+      var introdu = email[i].toString();
       var muestra = introdu.substring(7);
       texto.push(introdu);
       

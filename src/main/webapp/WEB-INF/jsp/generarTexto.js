@@ -46,12 +46,12 @@ function generarTexto(emails) {
  
   //texto.push(datos.nombre);
   //texto.push(';\n');
-  var email = [emails];
+  var email = emails;
   var i;
   for(i=0;i<email.length;i++){
       
       var introdu = email[i].toString();
-      var muestra = introdu.substring(7);
+      var muestra = introdu.substring(8);
       texto.push(muestra);
       
   }

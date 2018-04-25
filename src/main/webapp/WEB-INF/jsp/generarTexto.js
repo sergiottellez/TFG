@@ -35,17 +35,33 @@ function descargarArchivo(contenidoEnBlob, nombreArchivo) {
 //solo objeto
 function obtenerDatos() {
   return {
-    nombre: document.getElementById('emails').value
+    nombre: document.getElementById('emails').innerHTML
 
   };
 };
  
 //Genera un objeto Blob con los datos en un archivo TXT
 function generarTexto(datos) {
-  var texto = [];
+//  var texto = [];
  
-  texto.push(datos.nombre);
-  texto.push(';\n');
+  //texto.push(datos.nombre);
+  //texto.push(';\n');
+  
+   var texto = datos.nombre.replace(/<thead>/g,'')
+                            .replace(/<\/thead>/g,'')
+                            .replace(/<tbody>/g,'')
+                            .replace(/<\/tbody>/g,'')
+                            .replace(/<tr>/g,'')
+                            .replace(/<\/tr>/g,'\r\n')
+                            .replace(/<th>/g,'')
+                            .replace(/<\/th>/g,';')
+                            .replace(/<td>/g,'')
+                            .replace(/<\/td>/g,';')
+                            .replace(/\t/g,'')
+                            .replace(/\n/g,'')
+                            .replace(/<a\b[^>]*>/g,"")
+                            .replace(/<\/a>/g, "")
+                            .replace(/<a\b[^>]*>(.*?)<\/a>/g,'');
   
   //El constructor de Blob requiere un Array en el primer 
   //parámetro así que no es necesario usar toString. El 
@@ -57,7 +73,7 @@ function generarTexto(datos) {
  
 function descargartxt () {
   var datos = obtenerDatos();
-  descargarArchivo(generarTexto(datos), 'archivo.txt');
+  descargarArchivo(generarTexto(datos), 'posiblesBajas.txt');
   }
 
 

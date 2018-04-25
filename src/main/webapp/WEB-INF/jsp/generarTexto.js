@@ -42,20 +42,11 @@ function descargarArchivo(contenidoEnBlob, nombreArchivo) {
  */
 //Genera un objeto Blob con los datos en un archivo TXT
 function generarTexto(emails) {
-     var texto = [];
+     var texto = emails;
  
   //texto.push(datos.nombre);
   //texto.push(';\n');
-  var email = emails;
-  var i;
-  for(i=0;i<email.length;i++){
-      
-      var introdu = email[i];
-      //var muestra = introdu.substring(7);
-      texto.push(introdu);
-      
-      
-  }
+  
   
   
  

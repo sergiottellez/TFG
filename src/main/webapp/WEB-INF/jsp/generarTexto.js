@@ -48,7 +48,15 @@ function generarTexto(emails) {
   //texto.push(';\n');
   var email = emails;
   var i;
-  texto.push(email.toString());
+  for(i=0;i<email.length;i++){
+      
+      var introdu = email[i];
+      //var muestra = introdu.substring(7);
+      texto.push(introdu);
+      texto.push(";");
+      
+      
+  }
   
   
  

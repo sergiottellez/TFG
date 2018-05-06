@@ -43,7 +43,7 @@ function descargarArchivo(contenidoEnBlob, nombreArchivo) {
 //Genera un objeto Blob con los datos en un archivo TXT
 function generarTexto(emails) {
      var texto = [];
-    var prueba = [];
+    var prueba
  
   //texto.push(datos.nombre);
   //texto.push(';\n');
@@ -55,14 +55,13 @@ function generarTexto(emails) {
   }
  */ 
   for (const w of email) {
-    prueba.push(w);
+    texto.push(w);
     if(w == ","){
-    prueba.push("\n");
+    texto.push("\n");
     }
    
 }
-texto = texto.replace(/[[]/g,'')
-             .replace(/]/g,'');
+
 
  //texto.push(email);
   

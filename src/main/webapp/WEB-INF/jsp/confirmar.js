@@ -12,3 +12,7 @@ function confirmar()
 	else
 		return false;
 }
+
+function ayuda(){
+           alert('Si usted tiene alguna duda o sugerencia, contacte con: sistedestfg@gmail.com.');
+       }

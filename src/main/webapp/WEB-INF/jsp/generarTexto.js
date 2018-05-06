@@ -48,7 +48,11 @@ function generarTexto(emails) {
   //texto.push(';\n');
   var email = emails;
   var i;
- texto.push(email);
+  for(var j in email){
+      texto.push(j);
+      texto.push("\n");
+  }
+ //texto.push(email);
   
   
  

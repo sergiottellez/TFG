@@ -55,7 +55,9 @@ function generarTexto(emails) {
  */ 
   for (const w of email) {
     texto.push(w);
+    if(w == ","){
     texto.push("\n");
+    }
 }
  //texto.push(email);
   

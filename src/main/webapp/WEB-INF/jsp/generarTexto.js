@@ -58,7 +58,11 @@ function generarTexto(emails) {
     if(w == ","){
     texto.push("\n");
     }
+   
 }
+
+texto.replace(/[[]/g,'');
+texto.replace(/]/g,'');
  //texto.push(email);
   
   

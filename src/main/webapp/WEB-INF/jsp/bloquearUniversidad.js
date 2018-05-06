@@ -5,7 +5,7 @@
  */
 
     function bloqueaUniversidad(){
-    if($("#empresa").val() == '1'){
+    if($("#empresa").val() == '0'){
         $("#universidad").prop("disabled",true);
     }else{
                 $("#universidad").prop("disabled",false);

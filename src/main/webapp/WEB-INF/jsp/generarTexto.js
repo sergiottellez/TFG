@@ -48,10 +48,15 @@ function generarTexto(emails) {
   //texto.push(';\n');
   var email = emails;
   var i;
-  for( a=0; a< email.length; a++){
+  /*for( a=0; a< email.length; a++){
       texto.push(email[a]);
       texto.push("\n");
   }
+ */ 
+  for (const w of email) {
+    texto.push(w);
+    texto.push("\n");
+}
  //texto.push(email);
   
   

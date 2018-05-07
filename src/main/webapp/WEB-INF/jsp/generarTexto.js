@@ -51,25 +51,26 @@ function generarTexto(emails) {
   console.log(email);
   var arrayDeCaracteres = email.join("");
  
-  var bucle = JSON.parse(arrayDeCaracteres);
+  var bucle = arrayDeCaracteres.replace(/[["]/gm,"")
+                                .replace(/]/gm,"");
+                        
+                        console.log(bucle);
 
 
-for(i=0;i<bucle.length;i++){
-    texto.push(bucle[i][0]);
-    texto.push("\n");
-    
-    
 
     
+    
+
+    
 
 
- /* for (const w of email) {
+  for (const w of bucle) {
     texto.push(w);
     if(w == ","){
     texto.push("\n");
     }
     
-   */
+   
    
 }
 

@@ -54,13 +54,20 @@ function generarTexto(emails) {
       texto.push("\n");
   }
  */ 
+
+
+
+
   for (const w of email) {
     texto.push(w);
     if(w == ","){
     texto.push("\n");
     }
    
+   
 }
+
+    console.log(texto);
 
 
  //texto.push(email);

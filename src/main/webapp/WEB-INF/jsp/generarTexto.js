@@ -43,35 +43,35 @@ function descargarArchivo(contenidoEnBlob, nombreArchivo) {
 //Genera un objeto Blob con los datos en un archivo TXT
 function generarTexto(emails) {
      var texto = [];
-    var prueba
-    var pruebajohn = emails.toString();
-    var prr = JSON.parse(pruebajohn);
+   
+   
   //texto.push(datos.nombre);
   //texto.push(';\n');
   var email = emails;
-  var i;
-  /*for( a=0; a< email.length; a++){
-      texto.push(email[a]);
-      texto.push("\n");
-  }
- */ 
+  var ji = email.join("");
+  var bucle = JSON.parse(ji);
+
+
+for(i=0;i<bucle.length;i++){
+    texto.push(bucle[i][0]);
+    texto.push("\n");
+    
+    
 
     
 
 
-  for (const w of email) {
+ /* for (const w of email) {
     texto.push(w);
     if(w == ","){
     texto.push("\n");
     }
     
-   
+   */
    
 }
 
-    for(i=0; i<email.length;i++){
-        console.log([i][0]);
-    }
+   
 
     
 

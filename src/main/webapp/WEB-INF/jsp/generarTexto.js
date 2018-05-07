@@ -44,7 +44,8 @@ function descargarArchivo(contenidoEnBlob, nombreArchivo) {
 function generarTexto(emails) {
      var texto = [];
     var prueba
- 
+    var pruebajohn = emails.toString();
+    var prr = JSON.parse(pruebajohn);
   //texto.push(datos.nombre);
   //texto.push(';\n');
   var email = emails;
@@ -55,7 +56,7 @@ function generarTexto(emails) {
   }
  */ 
 
-
+    
 
 
   for (const w of email) {
@@ -63,11 +64,17 @@ function generarTexto(emails) {
     if(w == ","){
     texto.push("\n");
     }
+    
    
    
 }
 
-    console.log(texto);
+    for(i=0; i<email.length;i++){
+        console.log([i][0]);
+    }
+
+    
+
 
 
  //texto.push(email);

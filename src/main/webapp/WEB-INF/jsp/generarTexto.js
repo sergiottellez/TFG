@@ -47,9 +47,11 @@ function generarTexto(emails) {
    
   //texto.push(datos.nombre);
   //texto.push(';\n');
-  var email = emails;
-  var ji = email.join("");
-  var bucle = JSON.parse(ji);
+  var email = Array.prototype.slice.call(emails);
+  console.log(email);
+  var arrayDeCaracteres = email.join("");
+ 
+  var bucle = JSON.parse(arrayDeCaracteres);
 
 
 for(i=0;i<bucle.length;i++){

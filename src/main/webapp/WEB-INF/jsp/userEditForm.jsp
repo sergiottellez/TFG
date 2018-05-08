@@ -21,6 +21,9 @@
  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
  <script src="https://cdn.rawgit.com/sergiottellez/TFG/cca09cdb/src/main/webapp/WEB-INF/jsp/seleccionar.js"></script>
+ <script src="https://cdn.rawgit.com/sergiottellez/TFG/bdcde6b0/src/main/webapp/WEB-INF/jsp/confirmar.js"> </script>
+<script src="https://cdn.rawgit.com/sergiottellez/TFG/00e2688a/src/main/webapp/WEB-INF/jsp/bloquearUniversidad.js">
+ </script>
 </head>
 <body>
     
@@ -35,7 +38,11 @@
         
         <div class="form-group">
       <label for = "user_id"> ID: </label>
-  <form:input path="user_id" class="form-control" readonly="true" /> 
+  <form:input path="user_id" class="form-control" readonly="true" /> <div>
+                           <button type="button" onclick="ayudaNewUsuario()" class="btn btn-info"><span  class="glyphicon glyphicon-question-sign"></span></button>
+
+         
+     </div>
    
 
         </div>
@@ -74,11 +81,11 @@
      
      <div class="form-group">
       <label for ="email">Email</label>
-      <form:input path="email" class="form-control"/>
+      <form:input path="email" class="form-control" required="true" />
      </div>
      <div class="form-group">
       <label for = "password">Password: </label>
-      <form:input type="password" id="password" onclick="seleccionar()"  path="password" showPassword="false"   class="form-control"/>
+      <form:input type="password" id="password" onclick="seleccionar()"  path="password" showPassword="false" required="true"  class="form-control"/>
      </div>
      <div class="form-group">
       <label for = "role">Rol (admin o usuario normal): </label> 
@@ -94,7 +101,10 @@
      
      <div class="form-group">
       <label for = "universidad">Universidad: </label>
-      <form:input path="universidad" class="form-control"/>
+         <form:select path="universidad" disabled="false" id="universidad" onchange="bloqueaUniversidad()">
+           <form:option value=" " label="Seleccione" />
+          <form:options items="${universidades}"   />
+        </form:select>
      </div>
      
      <div class="form-group">
@@ -116,7 +126,9 @@
      
      <div class="form-group">
       <label for = "pais">País: </label>
-      <form:input path="pais" class="form-control"/>
+      <form:select path="pais">
+         <form:options items="${paises}" />
+        </form:select>
      </div>
      
      <div class="form-group">
@@ -127,9 +139,10 @@
      
      <div class="form-group">
       <label for = "empresa">Pertenece a empresa: </label>
-     <form:select path="empresa" class="form-control"> 
+ <form:select path="empresa" class="form-control" id="empresa" onclick="bloqueaUniversidad()"> 
+           <form:option value="0"> No </form:option>
           <form:option value="1"> Sí </form:option>
-                    <form:option value="0"> No </form:option>
+                   
 
           
       </form:select>
@@ -137,7 +150,9 @@
      
      <div class="form-group">
       <label for = "antiguedad">Año antigüedad: </label>
-      <form:input path="antiguedad" class="form-control" readonly="true"/>
+      <c:if test="${sessionScope.user.role == 1}" ><form:input path="antiguedad" class="form-control" /> </c:if>
+      <c:if test="${sessionScope.user.role == 0}" ><form:input path="antiguedad" class="form-control" readonly="true" /> </c:if>
+
      </div>
      
      <div class="form-group">
@@ -172,6 +187,8 @@
      
      <div class="form-group">
       <input type="submit" value="Guardar" class="btn btn-success"/>
+      <a href="home" class="btn btn-success"><i class="glyphicon glyphicon-remove-circle"></i>Cancelar</a>
+
      </div>
     </form:form>
    </div>

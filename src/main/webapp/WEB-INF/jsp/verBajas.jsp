@@ -1,8 +1,9 @@
 <%-- 
-    Document   : verLista
-    Created on : 15-mar-2018, 12:16:13
+    Document   : verBajas
+    Created on : 25-abr-2018, 17:27:56
     Author     : sergiottellez
 --%>
+
 
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
@@ -30,8 +31,9 @@
 
  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
- <script src="https://cdn.rawgit.com/sergiottellez/TFG/bdcde6b0/src/main/webapp/WEB-INF/jsp/confirmar.js"></script>
+ <script async="async"  src="https://cdn.rawgit.com/sergiottellez/TFG/0a02bc85/src/main/webapp/WEB-INF/jsp/confirmar.js"></script>
  <script src="https://cdn.rawgit.com/sergiottellez/TFG/407a3959/src/main/webapp/WEB-INF/jsp/crearCSV.js"> </script>
+ <script src="https://cdn.rawgit.com/sergiottellez/TFG/4e29c6e4/src/main/webapp/WEB-INF/jsp/generarTexto.js"> </script>
 </head>
 <body>
     
@@ -40,35 +42,11 @@
 <div class="container-fluid">
  <div class="row-fluid">
   <div class="col-md-6">
-   <h4 class="text-center">Lista de SOCIOS. USUARIO:</h4>
+   <h4 class="text-center">Lista de posibles bajas</h4>
    
    
      
-                    <div class="panel-body">
-                        <form id="listar" action="verLista" method="POST">              
-                            <label> Tipo de busqueda: </label>
-                            <div id="txt">
-                                <input type="text" id="textoTipoBusqueda"  name="textoTipoBusqueda" />
-                            </div>
-                             <br/> 
-                            <select id="tipoListadoNumero" value="6" name="tipoListadoNumero" onchange="campoBusqueda(this.value)">
-                                <option value= "0" itemLabel="Email" label="Email"/>
-                                <option value = "1" itemLabel = "Universidad" label="Universidad"/>
-                                <option value = "4" itemLabel = "Región" label="Region"/> 
-                                <option value = "3" itemLabel = "Activos" label="Usuarios Activos" />
-                                <option value = "5" itemLabel = "Nombre" label="Nombre" />
-                                <option value = "6" itemLabel = "Todos" label="Todos" />
-       
-                            </select>
-                            
-                            <br/>
-                            <br/>
-                              <button class="btn btn-primary"><i class="glyphicon glyphicon-search"></i>Buscar</button>         
-                            <br/>
-                            
-                            
-                        </form>
-                    </div>
+                   
                
    <hr>
    <table id="tabletocsv" class="table table-bordered table-striped">
@@ -93,7 +71,7 @@
     </tr>
     </thead>
     <tbody>
-    <c:forEach var="users" items="${datos}">
+    <c:forEach var="users" items="${bajas}">
      <tr>
       <c:if test="${sessionScope.user.role == 1 ||sessionScope.user.email.equals(users.email)}" ><td><c:out value="${users.email}"/></td></c:if>
       <c:if test="${sessionScope.user.role == 1 ||sessionScope.user.email.equals(users.email)}" ><td><c:out value="${users.nombre}"/> </td></c:if>
@@ -119,15 +97,15 @@
    </table>
    <br />
    
+   
    <a href="home" class="btn btn-success"><i class="glyphicon glyphicon-edit"></i>Home</a>
-     <c:if test="${user.role == 1}" > <a href="newUser" class="btn btn-success" >
- <i class="glyphicon glyphicon-edit"></i> Nuevo Socio</a> </c:if> 
-   <a href="summary" class="btn btn-success"><i class="glyphicon glyphicon-edit"></i>Summary </a>
-   <button onClick="crearCSV()" class="btn btn-success"> <c:if test="${user.role == 1}" > Exportar a CSV</button></c:if> 
+   <button onClick="crearCSV()" class="btn btn-success"> <c:if test="${user.role == 1}" > Exportar lista a CSV</button></c:if> 
 
  
-  <c:if test="${user.role == 1}" >  <a href="importExcel" class="btn btn-success"><i class="glyphicon glyphicon-edit"></i>Importar desde Excel   </a> </c:if> 
  
+   <button onClick="descargartxt('${emails}')" class="btn btn-success"> <c:if test="${user.role == 1}" > Obtener emails</button></c:if> 
+  
+  <a href="summary" class="btn btn-success"><i class="glyphicon glyphicon-edit"></i>Summary </a>
 <br/>
 <br/>
 
@@ -139,12 +117,6 @@
         <div class='define'>
 		<img src="https://www.sistedes.es/wp-content/themes/sistedes/logo.png" class="img-responsive center-block" width="300" height="300" alt="Logo" />
         </div>
-    
-    <div>
-                           <button type="button" onclick="ayuda()" class="btn btn-info"><span  class="glyphicon glyphicon-question-sign"></span></button>
-
-         
-     </div>
     </footer>
 </body>
 </html>

@@ -18,6 +18,16 @@ public class Grupo {
     
     private String url;
     
+    private int id;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+    
     private User responsable;
     
     private User corresponsal;

@@ -1,8 +1,10 @@
 <%-- 
-    Document   : login
-    Created on : 20-mar-2018, 17:06:00
+    Document   : recuperarPass
+    Created on : 01-may-2018, 17:35:38
     Author     : sergiottellez
 --%>
+
+
 
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
@@ -18,7 +20,7 @@
 <head>
         <link rel="shortcut icon" href="https://cdn.rawgit.com/sergiottellez/TFG/289ded45/src/main/webapp/WEB-INF/jsp/images/logo069_400x400.ico">
 
-	<title>SISTEDES Login</title>
+	<title>SISTEDES</title>
 	<link rel="stylesheet" type="text/css" href="https://cdn.rawgit.com/sergiottellez/TFG/b4668f82/src/main/webapp/WEB-INF/jsp/login.css" />
 	<link rel="stylesheet" href="https://cdn.rawgit.com/sergiottellez/TFG/b4668f82/src/main/webapp/WEB-INF/jsp/bootstrap.min.css"/>
   	<script src="https://cdn.rawgit.com/sergiottellez/TFG/b4668f82/src/main/webapp/WEB-INF/jsp/jquery.min.js"> </script>
@@ -32,17 +34,15 @@
 	
 	<div class="container">
 		<img src="https://cdn.rawgit.com/sergiottellez/TFG/0a02bc85/src/main/webapp/WEB-INF/jsp/images/logo.png" class="img-responsive center-block" width="300" height="300" alt="Logo" />
-		 <form name="loginForm" action='login' method="post" class="form-signin">
-			<h3 class="form-signin-heading" th:text="Welcome"> Bienvenido</h3>
+		 <form name="recuperarPass" action='recuperarPassAction' method="post" class="form-signin">
+			<h3 class="form-signin-heading" th:text="Welcome"> Recuperar contraseña</h3>
 			<br/>
 			 
 			<input type="text" id="dni" name="dni"  placeholder="DNI"
-				class="form-control" required="true" /> <br/> 
-			<input type="password"  placeholder="Password"
-				id="password" name="password" class="form-control" required="true"/> <br /> 
-				<a href='recuperarPass'> <c:out value="¿Olvidaste tu contraseña?"/></a>
+				class="form-control" required="true"/> <br/> 
+			 <br /> 
                       
-			<button class="btn btn-lg btn-primary btn-block" name="Submit" value="Login" type="Submit" >Login</button>
+			<button class="btn btn-lg btn-primary btn-block" name="Submit" value="Aceptar" type="Submit" >Aceptar</button>
 		</form>
 	</div>
 </body>

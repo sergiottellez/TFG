@@ -20,3 +20,5 @@ function ayuda(){
 function ayudaNewUsuario(){
            alert('Si el usuario es externo, su ID es "EXT". En otro caso seguirá este patrón SxxxxxN (o F en caso de fundador)');
        }
+       
+       

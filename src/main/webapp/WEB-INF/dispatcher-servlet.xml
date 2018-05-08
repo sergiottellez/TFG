@@ -48,6 +48,20 @@
                 <prop key="grupoUserP/*">userController</prop>
                 <prop key="verHistorial/*">userController</prop>
                    <prop key="verHistorial">userController</prop>
+                   <prop key="verBajas">userController</prop>
+                 <prop key="miPerfil">userController</prop>
+                 <prop key="cambiarPass">userController</prop>
+                  <prop key="recuperarPass">userController</prop>
+                   <prop key="recuperarPassActionlRec">userController</prop>
+                                      <prop key="recuperarPassActionlRec/*">userController</prop>
+                                       <prop key="recuperarPassAction*">userController</prop>
+                                        <prop key="cambiarPassFinal">userController</prop>
+
+                                     
+
+
+
+
 
 
 

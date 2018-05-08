@@ -14,6 +14,8 @@
 
  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+ <script src=”https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.21/jquery-ui.min.js”></script>
+ <script src="https://cdn.rawgit.com/sergiottellez/TFG/bdcde6b0/src/main/webapp/WEB-INF/jsp/confirmar.js"> </script>
 <title>Home</title>
 </head>
 <body>
@@ -22,7 +24,7 @@
         
         
               <a id="logout" href="/TFGPruebaFinal/logout"   class="btn btn-default btn-sm"> <i class="glyphicon glyphicon-log-out"></i>Logout </a>
-   
+          
 
     <h1 style="text-align:center;">Welcome 
  <c:if test="${user.nombre != null }">
@@ -30,9 +32,14 @@
  </c:if> </h1>
  <br/>
 <div class="trans text-center"> 
- <a href='<c:url value="/verLista" />' class="btn btn-info  btninter centrado">Listado de Socios</a>
+    <c:if test="${user.role == 1}"><a href='<c:url value="/verLista" />' class="btn btn-info  btninter centrado">Listado de Socios</a></c:if>
  
+    <a href="editUser?id=${user.email}"  class="btn btn-info  btninter centrado">Mi Perfil</a>
+    
  <a href='<c:url value="/summary" />' class="btn btn-info  btninter centrado">Summary</a>
+ 
+  <a href='<c:url value="/verBajas" />' class="btn btn-info  btninter centrado">Ver posibles bajas</a>
+
  </div>
  
  
@@ -42,7 +49,15 @@
  <footer>
         <div class='define'>
 		<img src="https://www.sistedes.es/wp-content/themes/sistedes/logo.png" class="img-responsive center-block" width="300" height="300" alt="Logo" />
+               
+                
+                
         </div>
+    <div>
+                           <button type="button" onclick="ayuda()" class="btn btn-info"><span  class="glyphicon glyphicon-question-sign"></span></button>
+
+         
+     </div>
     </footer>
 </body>
 </html>

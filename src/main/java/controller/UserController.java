@@ -13,10 +13,22 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
+import java.util.Random;
+import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.mail.Message;
+import javax.mail.Session;
+import javax.mail.internet.AddressException;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -37,6 +49,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.messaging.MessagingException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -52,6 +65,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
+import sun.rmi.transport.Transport;
 
 
 /**
@@ -83,6 +97,9 @@ public class UserController {
     
     @Autowired
     private List listado;
+    
+    @Autowired
+    private List bajas;
     
  
     
@@ -394,6 +411,27 @@ public ModelAndView editUser(HttpServletRequest request,HttpSession session) {
     String sql = "SELECT nombreReg from regionEsp ORDER BY nombreReg;";
     List<String> region = this.jdbcTemplate.queryForList(sql, String.class);
     model.addObject("region",region);
+    
+     String sql1 = "SELECT nombreUniv from universidad ORDER BY nombreUniv;";
+    List<String> universidades = this.jdbcTemplate.queryForList(sql1, String.class);
+    model.addObject("universidades",universidades);
+    
+    String[] locales = Locale.getISOCountries();
+
+    List<String> paises = new ArrayList<>();
+	for (String countryCode : locales) {
+
+		Locale obj = new Locale("", countryCode);
+
+		paises.add("" + obj.getCountry() 
+			+ "  " + obj.getDisplayCountry());
+
+	}
+        
+            model.addObject("paises",paises);
+
+    
+    
  
     return model;
 }
@@ -476,7 +514,7 @@ public ModelAndView editUser(HttpServletRequest request,HttpSession session) {
  
    
      public void deleteUser(final User userN)throws DataAccessException {//¿puede un mismo email tener varias cuentas?
-        String sql = "DELETE from user where email= '" + userN.getEmail() + "';" ; 
+        String sql = "DELETE from user where user_id= '" + userN.getUser_id()+ "' and actual=1;" ; 
         jdbcTemplate.update(sql);
         // getEm().getTransaction().begin();
         //Query query = getEm().createQuery(sql);
@@ -493,7 +531,7 @@ public ModelAndView deleteContact(HttpServletRequest request) {
    
     //User user = this.userService.findById(userId);
     
-    User userN = this.findById(userId);
+    User userN = this.findByIdDeVerdad(userId);
    deleteUser(userN);
  
    return new ModelAndView("home");
@@ -514,6 +552,27 @@ public ModelAndView newUser(HttpServletRequest request) {
     String sql = "SELECT nombreReg from regionEsp;";
     List<String> region = this.jdbcTemplate.queryForList(sql, String.class);
     model.addObject("region",region);
+
+    
+     String sql1 = "SELECT nombreUniv from universidad ORDER BY nombreUniv;";
+    List<String> universidades = this.jdbcTemplate.queryForList(sql1, String.class);
+    model.addObject("universidades",universidades);
+    
+    String[] locales = Locale.getISOCountries();
+
+    List<String> paises = new ArrayList<>();
+	for (String countryCode : locales) {
+
+		Locale obj = new Locale("", countryCode);
+
+		paises.add("" + obj.getCountry() 
+			+ "  " + obj.getDisplayCountry());
+
+	}
+        
+            model.addObject("paises",paises);
+
+    
  
     return model;
 }
@@ -523,7 +582,7 @@ public ModelAndView newUser(HttpServletRequest request) {
     public ModelAndView verSummary()
     {
         ModelAndView mav=new ModelAndView();
-        String sql="SELECT universidad FROM user";
+        String sql="SELECT universidad FROM user WHERE actual= 1";
         List<String> universidad = new ArrayList<>();
         Map<String, Tuple<Integer,Integer>> datosFinales = new HashMap<>();
         
@@ -543,15 +602,18 @@ public ModelAndView newUser(HttpServletRequest request) {
        
        for(String univ : universidad){
            //Buscamos por cada universidad el numero total que hay
-              String consulta="select count(*) from user where universidad= '" + univ + "' AND actual=1;"; //Esta consulta es la que falla
+              String consulta="select count(*) from user where universidad LIKE '" + univ + "' AND actual=1;"; //Esta consulta es la que falla
               Integer datosNumero = this.jdbcTemplate.queryForObject(consulta,Integer.class);
-              String consulta2="select count(activo) from user where universidad= '" + univ + "' AND activo=" + 1 + " AND actual=1;"; //Esta consulta es la que falla
+              String consulta2="select count(activo) from user where universidad LIKE '" + univ + "' AND activo=" + 1 + " AND actual=1;"; //Esta consulta es la que falla
               Integer datosNumero2 = this.jdbcTemplate.queryForObject(consulta2,Integer.class);
+              
               Tuple<Integer,Integer> tupla = new Tuple(datosNumero,datosNumero2);
               
               datosFinales.put(univ, tupla);
-           
+              
        }
+       
+      
        
        
        
@@ -666,7 +728,7 @@ public ModelAndView saveContact(@Valid @ModelAttribute("contacto") User contacto
         contacto.setGrupoInvestigacion(null);
     }
   
-        String sql1 = "SELECT * from user WHERE user_id = " + contacto.getUser_id() + ";";
+        String sql1 = "SELECT * from user WHERE user_id LIKE '" + contacto.getUser_id() + "';";
        //Query query = getEm().createQuery(sql);
        List userLista =  this.jdbcTemplate.query(sql1, new RowMapper<User>(){
             
@@ -700,7 +762,11 @@ public ModelAndView saveContact(@Valid @ModelAttribute("contacto") User contacto
         }
     });
        
-       
+       User e;
+        String sql5 = "SELECT * from user WHERE user_id LIKE '" + contacto.getUser_id() + "' AND actual=1;";
+        e = jdbcTemplate.queryForObject(sql5, new UserRowMapper());
+        boolean pass;
+        pass = e.getPassword().equals(contacto.getPassword());
        if(!userLista.isEmpty()){ //Todos los que tengan esa id los actualizamos
            
            
@@ -708,9 +774,28 @@ public ModelAndView saveContact(@Valid @ModelAttribute("contacto") User contacto
                jdbcTemplate.update(up,contacto.getUser_id());
            
        }
+       
+       if(pass){
     
     
      String sql = "INSERT INTO user (user_id,fecha,orcid,dni,password,apellido2,apellido1,nombre,sexo,dblppersonname,authorkey,role,universidad,region,empresa,pais,email,grupoInvestigacion,antiguedad,reciente,activo,fundador,actual)" +
+             "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)";
+        jdbcTemplate.update(sql, contacto.getUser_id(), fecha,
+                contacto.getOrcid(), contacto.getDni(),contacto.getPassword(),contacto.getApellido2(),
+                contacto.getApellido1(),contacto.getNombre(),contacto.getSexo(),
+                contacto.getDblppersonname(),contacto.getAuthorkey(),contacto.getRole(),contacto.getUniversidad(),
+               contacto.getRegion(),contacto.getEmpresa(),contacto.getPais(),
+                contacto.getEmail(),
+                contacto.getGrupoInvestigacion(),
+                contacto.getAntiguedad(),
+                contacto.getReciente(),
+                contacto.getActivo(),
+                contacto.getFundador(),
+                1);
+        
+        
+       }else{
+            String sql = "INSERT INTO user (user_id,fecha,orcid,dni,password,apellido2,apellido1,nombre,sexo,dblppersonname,authorkey,role,universidad,region,empresa,pais,email,grupoInvestigacion,antiguedad,reciente,activo,fundador,actual)" +
              "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)";
         jdbcTemplate.update(sql, contacto.getUser_id(), fecha,
                 contacto.getOrcid(), contacto.getDni(),this.passwordEncoder.encode(contacto.getPassword()),contacto.getApellido2(),
@@ -724,9 +809,7 @@ public ModelAndView saveContact(@Valid @ModelAttribute("contacto") User contacto
                 contacto.getActivo(),
                 contacto.getFundador(),
                 1);
-        
-        
-        
+       }
      
     ModelAndView mv = new ModelAndView("home");
     
@@ -895,16 +978,226 @@ public List listFindById(String id) throws DataAccessException {
 
 
 
+@RequestMapping(value = "/verBajas", method = RequestMethod.GET)
+public ModelAndView verBajas(HttpServletRequest request,HttpSession session) {
+   
+    //User user = this.userService.findById(userId);
+    
+    bajas = this.findPosiblesBajas();
+    List<Map<String,Object>> emails = this.findPosiblesBajasEmail();
+    ModelAndView model = new ModelAndView("verBajas");
+    model.addObject("bajas", bajas);
+    List email = new ArrayList<>(); 
+    Collection<Object> values = new ArrayList<>();
+   for(int i = 0; i<emails.size(); i++){
+        values.add(emails.get(i).values().toString());
+      
+   }
+   
+   
+     for(Object a : values){
+       email.add(a);
+               }
+     
+     Object[] a = email.toArray();
+   System.out.println(email.get(0));
+    model.addObject("emails",email);
+    
+    return model;
+}
+
+    private List findPosiblesBajas() {
+        String sql = "SELECT * from user WHERE actual=1 AND ((YEAR(NOW())+1)-reciente) > 3 AND fundador=0;";
+       //Query query = getEm().createQuery(sql);
+       List userN = new ArrayList<>();
+        userN =  this.jdbcTemplate.queryForList(sql);
+       
+       return userN;
+             } 
+    
+     private List<Map<String,Object>> findPosiblesBajasEmail() {
+        String sql = "SELECT email from user WHERE actual=1 AND ((YEAR(NOW())+1)-reciente) > 3 AND fundador=0;";
+       //Query query = getEm().createQuery(sql);
+      
+       List<Map<String,Object>> userN;
+        userN =  this.jdbcTemplate.queryForList(sql);
+       
+       return userN;
+             } 
+     @RequestMapping(value = "/recuperarPass", method = RequestMethod.GET)
+public ModelAndView recuperarPass(HttpServletRequest request,HttpSession session) {
+   
+    //User user = this.userService.findById(userId);
+    
+   
+    ModelAndView model = new ModelAndView("recuperarPass");
+    
+    return model;
+}
 
 
+           @RequestMapping(value = "/recuperarPassAction", method = RequestMethod.POST)
+public ModelAndView recuperarPassAction(HttpServletRequest request,HttpSession session,@RequestParam String dni ) {
+   
+    //User user = this.userService.findById(userId);
+    User usuario;
+   
+    String sql = "SELECT * from user where dni LIKE ? AND actual = 1";
+    Object[] param = {dni};
+        List<User> us = this.jdbcTemplate.query(sql, param, new UserRowMapper());
+        if(!us.isEmpty()){
+            usuario = us.get(0);
+            String sql2 = "UPDATE user SET newPass = 1  WHERE user_id=?";
+            jdbcTemplate.update(sql2,usuario.getUser_id());
+            
+            
+             String caracteres = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRST";
+       char[] array = caracteres.toCharArray();
+       Integer nCaracteres = caracteres.toCharArray().length;
+         char[] aleatorio = new char[nCaracteres];
+           Random r = new Random();
+       for(int i = 0; i<nCaracteres;i++){
+         aleatorio[i] = array[r.nextInt(nCaracteres-1)];
+       }
+       
+            
+            String url = Arrays.toString(aleatorio) + usuario.getNombre() + usuario.getApellido1();
+       
+       String urlSecreta = this.passwordEncoder.encode(url);
+       
+       String sql3 = "INSERT into recPass (user_id,url) VALUES (?,?)";
+       jdbcTemplate.update(sql3,usuario.getUser_id(),urlSecreta);
+       
+       String urlFinal= "http://localhost:8080/TFGPruebaFinal/recuperarPassActionlRec?url=" + urlSecreta;
+       
+       String cuerpo = "Recupere su contraseña de SISTEDES a través de la siguiente URL: "+ urlFinal;
+       
+        try {
+            enviarConGMail(usuario.getEmail(),"Recuperar password",cuerpo);
+        } catch (javax.mail.MessagingException ex) {
+            Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+       
+       
+        }
+        
+           ModelAndView model = new ModelAndView("login");
+    
+             return model;
+        
+        
+}
+
+  private static void enviarConGMail(String destinatario, String asunto, String cuerpo) throws AddressException, javax.mail.MessagingException {
+        
+            // Esto es lo que va delante de @gmail.com en tu cuenta de correo. Es el remitente también.
+            String remitente = "sistedestfg";  //Para la dirección nomcuenta@gmail.com
+            String pass = "sistedesprueba";
+            Properties props = System.getProperties();
+         
+    props.put("mail.smtp.host", "smtp.gmail.com");  //El servidor SMTP de Google
+    props.put("mail.smtp.user", remitente);
+    props.put("mail.smtp.clave", "sistedesprueba");    //La clave de la cuenta
+    props.put("mail.smtp.auth", "true");    //Usar autenticación mediante usuario y clave
+    props.put("mail.smtp.starttls.enable", "true"); //Para conectar de manera segura al servidor SMTP
+    props.put("mail.smtp.port", "587"); //El puerto SMTP seguro de Google
+            
+            Session session = Session.getDefaultInstance(props);
+    MimeMessage message = new MimeMessage(session);
+
+    try {
+                try {
+                    message.setFrom(new InternetAddress(remitente));
+                } catch (javax.mail.MessagingException ex) {
+                    Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+        message.addRecipients(Message.RecipientType.TO, destinatario);  //Se podrían añadir varios de la misma manera
+        message.setSubject(asunto);
+        message.setText(cuerpo);
+                javax.mail.Transport transport = session.getTransport("smtp");
+        transport.connect("smtp.gmail.com", remitente, pass);
+        transport.sendMessage(message, message.getAllRecipients());
+        transport.close();
+    }
+    catch (MessagingException me) {
+        me.printStackTrace();   //Si se produce un error
+    }
+ 
+}
+  
+   @RequestMapping(value = "/recuperarPassActionlRec", method = RequestMethod.GET)
+public ModelAndView recuperarPassActionlRec(HttpServletRequest request,HttpSession session) {
+     ModelAndView model = new ModelAndView();
+    String url = request.getParameter("url");
+    
+    String sql = "SELECT user_id from recPass where url LIKE ? " ;
+    
+    Object[] param = {url};
+   String lista =  this.jdbcTemplate.queryForObject(sql, param, String.class);
+   
+   String sql1 = "SELECT * FROM user WHERE user_id LIKE ? AND actual=1 AND newPass=1";
+
+    Object[] parame = {lista};
+    List<User> us = this.jdbcTemplate.query(sql1, parame, new UserRowMapper());
+    
+    if(!us.isEmpty()){
+        
+
+            model.setViewName("cambiarPass");
+        
+        
+        
+        
+    }else{
+        //Aqui iria la de error
+          model.setViewName("login");
+         
+    }
+    
+    return model;
+ 
+    
+    
+    
+}
+
+@RequestMapping(value = "/cambiarPassFinal", method = RequestMethod.POST)
+public ModelAndView cambiarPassFinal(@RequestParam String dni,@RequestParam String password,HttpServletRequest request,HttpSession session) {
+     ModelAndView model = new ModelAndView();
+    
+    
+     String up = "UPDATE user SET newPass = 0, password=?  WHERE dni=? AND actual=1";
+      jdbcTemplate.update(up,this.passwordEncoder.encode(password),dni);
+      String persona = "SELECT user_id FROM user WHERE dni LIKE ?";
+      Object[] param = {dni};
+      String us = jdbcTemplate.queryForObject(persona, param, String.class);
+    String delete = "DELETE FROM recPass where user_id LIKE ?";
+    jdbcTemplate.update(delete, us);
+   
+            model.setViewName("login");
+        
+        
+        
+  
+    
+    return model;
+ 
+    
+    
+    
+}
+   
+   
+
+
+		
+	
+     
+     
+        
         
     
-    
-            
-           
-  
-       
-    
 
-    
+
+
 }

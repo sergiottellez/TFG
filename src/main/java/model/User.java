@@ -55,7 +55,10 @@ public class User  {
         private int reciente;
 
         private int activo;
+        
+        private int cuota;
 
+  
         private Integer role;
         
         private String sexo;
@@ -63,6 +66,13 @@ public class User  {
         private String dni;
         
         private String grupoInvestigacion;
+  public int getCuota() {
+        return cuota;
+    }
+
+    public void setCuota(int cuota) {
+        this.cuota = cuota;
+    }
 
     public Date getFecha() {
         return fecha;

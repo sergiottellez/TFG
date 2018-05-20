@@ -6,14 +6,14 @@
 
     function bloqueaUniversidad(){
     if($("#empresa").val() == "0"){
-        $("#universidad").prop("disabled",true);
+        $("#universidad").prop("disabled",false);
                 $("#labelEmpresa").hide();
 
         $("#nombreEmpresa").hide();
     }else if($("#empresa").val() == "1"){
                 
             $("universidad").val(" ");
-        $("#universidad").prop("disabled",false);
+        $("#universidad").prop("disabled",true);
         $("#labelEmpresa").show();
                 $("#nombreEmpresa").show();
                 

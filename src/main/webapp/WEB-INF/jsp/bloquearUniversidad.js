@@ -7,8 +7,13 @@
     function bloqueaUniversidad(){
     if($("#empresa").val() == "0"){
         $("#universidad").prop("disabled",true);
+        $("#nombreEmpresa").hide();
     }else if($("#empresa").val() == "1"){
+                
+            $("universidad").val(" ");
         $("#universidad").prop("disabled",false);
+        
+        
 
     }
     

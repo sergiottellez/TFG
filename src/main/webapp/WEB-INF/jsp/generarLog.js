@@ -25,7 +25,8 @@
    function generarLog() {
     var link = document.getElementById('downloadlink');
     var text = document.getElementById('textbox');
-    link.href = makeTextFile(text.value);
+    console.log(text);
+    link.href = makeTextFile(text);
     link.style.display = 'block';
   };
 

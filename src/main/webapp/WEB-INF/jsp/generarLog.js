@@ -3,9 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-(function () {
-var textFile = null,
-  makeTextFile = function (text) {
+
+
+  function makeTextFile (text) {
+      var textFile = null;
     var data = new Blob([text], {type: 'text/plain'});
 
     // If we are replacing a previously generated file we need to
@@ -20,14 +21,12 @@ var textFile = null,
   };
 
 
-  var create = document.getElementById('create'),
-    textbox = document.getElementById('textbox');
 
-   function generarLog () {
+   function generarLog() {
     var link = document.getElementById('downloadlink');
     var text = document.getElementById('textbox');
     link.href = makeTextFile(text.value);
     link.style.display = 'block';
   };
-})();
+
 

@@ -23,10 +23,11 @@ var textFile = null,
   var create = document.getElementById('create'),
     textbox = document.getElementById('textbox');
 
-  create.addEventListener('click', function () {
+   function generarLog () {
     var link = document.getElementById('downloadlink');
-    link.href = makeTextFile(textbox.value);
+    var text = document.getElementById('textbox');
+    link.href = makeTextFile(text.value);
     link.style.display = 'block';
-  }, false);
+  };
 })();
 

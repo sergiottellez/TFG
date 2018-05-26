@@ -59,23 +59,23 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
  protected void configure(HttpSecurity http) throws Exception{
   http.csrf().disable();
   
-  http.authorizeRequests().antMatchers("/login", "/user/signup", "/user/register").permitAll();
-  http.authorizeRequests().antMatchers("/verLista.htm", "/verLista")
+  http.authorizeRequests().antMatchers("/login").permitAll();
+  http.authorizeRequests().antMatchers("/verLista", "/verLista")
 .access("hasRole(1)");
   http.authorizeRequests().antMatchers("/verLista")
 .access("hasRole(1)");
   
   http.authorizeRequests().and().formLogin()
    .loginProcessingUrl("/j_spring_security_check")
-   .loginPage("/login")
-   .failureUrl("/login?error=true")
-   .usernameParameter("email")
+   .loginPage("/loginSecurity")
+   .failureUrl("/errors/acces_denied")
+   .usernameParameter("dni")
    .passwordParameter("password")
    .and().logout().logoutUrl("/j_spring_security_logout").logoutSuccessUrl("/login")
    .and().rememberMe()
    .tokenRepository(persistentTokenRepository())
    .tokenValiditySeconds(60*60)
-   .and().exceptionHandling().accessDeniedPage("/accessDenied");
+   .and().exceptionHandling().accessDeniedPage("/errors/acces_denied");
  }
  
  @Bean

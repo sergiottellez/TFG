@@ -57,6 +57,34 @@ public class User  {
         private int activo;
         
         private int cuota;
+        
+        private int idUniversidad;
+        
+        private int primerLogin;
+
+    public int getPrimerLogin() {
+        return primerLogin;
+    }
+
+    public void setPrimerLogin(int primerLogin) {
+        this.primerLogin = primerLogin;
+    }
+
+    public int getIdUniversidad() {
+        return idUniversidad;
+    }
+
+    public void setIdUniversidad(int idUniversidad) {
+        this.idUniversidad = idUniversidad;
+    }
+
+    public String getNombreEmpresa() {
+        return nombreEmpresa;
+    }
+
+    public void setNombreEmpresa(String nombreEmpresa) {
+        this.nombreEmpresa = nombreEmpresa;
+    }
 
   
         private Integer role;
@@ -66,6 +94,8 @@ public class User  {
         private String dni;
         
         private String grupoInvestigacion;
+        
+        private String nombreEmpresa;
   public int getCuota() {
         return cuota;
     }

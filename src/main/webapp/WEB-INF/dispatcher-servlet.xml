@@ -56,7 +56,12 @@
                                       <prop key="recuperarPassActionlRec/*">userController</prop>
                                        <prop key="recuperarPassAction*">userController</prop>
                                         <prop key="cambiarPassFinal">userController</prop>
+                  <prop key="loginSecurity">userController</prop>
+                    <prop key="errorLogin">userController</prop>
+                   <prop key="uploadExcelFile">userController</prop>
 
+
+                    <prop key="j_spring_security_check">userController</prop>
                                      
 
 
@@ -82,11 +87,7 @@
     <!--
     The index controller.
     -->
-    
- 
-    
-    
-    
+
           <bean name="userController" class="controller.UserController"/>
           
        
@@ -97,24 +98,31 @@
             <bean id="user"    class="model.User" scope="session"/> 
                         <bean id="grupo"    class="model.Grupo" scope="session"/>   
   
-            
-                
-
   
-
-       
-        
-          
-
-
-          
-     
-
 
     <bean name="indexController"
           class="org.springframework.web.servlet.mvc.ParameterizableViewController"
           p:viewName="index" />
+    
+    
+    <bean id="multipartResolver"
+   class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+    <property name="maxUploadSize" value="5000000"/>
+</bean>
+    
+    <bean id="dataSource4Security" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
 
-    
-    
+                <property name="driverClassName" value="com.mysql.jdbc.Driver" />
+
+                <property name="url" value="jdbc:mysql://localhost:3306/TFG?zeroDateTimeBehavior=convertToNull" />
+
+                <property name="username" value="root" />
+
+                <property name="password" value="jonimoni" />
+
+</bean>
+
+
+
+  
 </beans>

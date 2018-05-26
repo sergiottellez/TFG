@@ -47,7 +47,7 @@
                         <input type="text" id="dni" name="dni"  placeholder="DNI"
 				class="form-control" required="true" /> <br/> 
                         
-			<input type="text" id="password" name="password"  placeholder="Nueva pass"
+			<input type="password" id="password" name="password"  placeholder="Nueva pass"
 				class="form-control" required="true"/> <br/> 
 			 <br /> 
                       

@@ -3,8 +3,7 @@
     Created on : 17-mar-2018, 15:51:18
     Author     : sergiottellez
 --%>
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+<%@page contentType="text/html; charset=UTF-8" pageEncoding="utf-8"%>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
     "http://www.w3.org/TR/html4/loose.dtd">
 
@@ -12,26 +11,73 @@
 
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 
-
+<html lang="es">
 <head>
         <link rel="shortcut icon" href="https://cdn.rawgit.com/sergiottellez/TFG/289ded45/src/main/webapp/WEB-INF/jsp/images/logo069_400x400.ico">
 
  <title>NUEVO SOCIO</title>
- <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+ <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
  <meta name="viewport" content="width=device-width, initial-scale=1">
  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
  <script src="https://cdn.rawgit.com/sergiottellez/TFG/bdcde6b0/src/main/webapp/WEB-INF/jsp/confirmar.js"> </script>
- <script src="https://cdn.rawgit.com/sergiottellez/TFG/00e2688a/src/main/webapp/WEB-INF/jsp/bloquearUniversidad.js">
+ <script src="https://cdn.rawgit.com/sergiottellez/TFG/3e610780/src/main/webapp/WEB-INF/jsp/bloquearUniversidad.js">
+ bloquearUniversidad();
  </script>
+ <script>
+          
+</script>
+ 
+ <script src="https://cdn.rawgit.com/sergiottellez/TFG/0073d1d2/src/main/webapp/WEB-INF/jsp/validarFormulario.js"> </script>
      
-     
+<style>
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #166088;
+}
 
+li {
+    float: left;
+
+}
+
+li a {
+    display: inline-block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+
+li a:hover {
+    background-color: #111;
+}
+
+.active {
+    background-color: #62A9EC;
+}
+</style>
 </head>
 <body>
     
-              <a id="logout" href="/TFGPruebaFinal/logout"   class="btn btn-default btn-sm"> <i class="glyphicon glyphicon-log-out"></i>Logout </a>
+            <!--  <a id="logout" href="logout"   class="btn btn-default btn-sm"> <i class="glyphicon glyphicon-log-out"></i>Logout </a> > -->
+
+              
+ <ul>
+  <li><a href="home" class="active">Home</a></li>
+  <c:if test="${user.role == 1}"> <li><a href="verLista">Ver lista</a></li></c:if>
+   <li><a href="editUser?id=${user.email}">Mi Perfil</a></li>
+   <c:if test="${user.role == 1}"><li><a href="summary">Summary</a></li></c:if>
+  <c:if test="${user.role == 1}"> <li><a href="newUser">Nuevo Usuario</a></li></c:if>
+      <c:if test="${user.role == 1}"><li><a href="verBajas">Bajas</a></li></c:if>
+  <li>  <a id="logout" href="logout">Logout</a></li>
+
+
+</ul>   
 
     
     
@@ -40,13 +86,13 @@
    <div class="col-md-6">
     <h4 class="text-center">Agregar Nuevo Socio</h4>
     <hr>
-    <form:form action="saveContactNew" method="POST" modelAttribute="contacto">
+    <form:form action="saveContactNew" method="POST" modelAttribute="contacto" onsubmit="validarNIF()">
         
        
        <div class="form-group">
       <label for = "user_id"> ID: </label>
-  <form:input path="user_id" class="form-control" required="true"   /> <div>
-                           <button type="button" onclick="ayudaNewUsuario()" class="btn btn-info"><span  class="glyphicon glyphicon-question-sign"></span></button>
+  <form:input path="user_id" class="form-control" required="true" title="Introduzca un ID con el siguiente patrón: SNxxxx o  SFxxxx en caso de fundador o EXT si es externo.."  /> <div>
+        <button type="button" onclick="ayudaNewUsuario()" class="btn btn-info"><span  class="glyphicon glyphicon-question-sign"></span></button>
 
          
      </div>
@@ -58,7 +104,7 @@
         
         <div class="form-group">
       <label for = "dni"> DNI: </label>
-  <form:input path="dni" class="form-control" required="true"  /> 
+  <form:input id="dni" path="dni" class="form-control" title="Campo obligatorio" required="true" onchange="validarNIF(this.value)" /> 
    
 
         
@@ -87,7 +133,7 @@
      
      <div class="form-group">
       <label for ="email">Email</label>
-      <form:input path="email" class="form-control" required="true" />
+      <form:input type="email" path="email" class="form-control" required="true" />
      </div>
      <div class="form-group">
       <label for = "password">Password: </label>
@@ -139,7 +185,7 @@
      
      <div class="form-group">
       <label for = "empresa">Pertenece a empresa: </label>
-      <form:select path="empresa" class="form-control" id="empresa" onclick="bloqueaUniversidad()"> 
+      <form:select path="empresa" class="form-control" id="empresa" onchange="bloqueaUniversidad()"> 
            <form:option value="0"> No </form:option>
           <form:option value="1"> Sí </form:option>
                    
@@ -148,14 +194,24 @@
       </form:select>
      </div>
      
+           
+            <div class="form-group">
+                <label onchange="bloqueauniversidad()" id="labelEmpresa" for = "nombreEmpresa">Nombre de empresa: </label>
+ <form:input  path="nombreEmpresa" class="form-control" id="nombreEmpresa" onchange="bloqueaUniversidad()"  /> 
+           
+
+          
+    
+     </div>
+     
      <div class="form-group">
       <label for = "antiguedad">Año antigüedad: </label>
-      <form:input path="antiguedad" class="form-control"/>
+      <form:input title="Año de inclusión" path="antiguedad" class="form-control" pattern="[0-9]{4}"/>
      </div>
      
      <div class="form-group">
       <label for = "reciente">Reciente: </label>
-      <form:input path="reciente" class="form-control"/> Año última aparición
+      <form:input title="Último año de renovación" path="reciente" class="form-control" pattern="[0-9]{4}"/> Año última aparición
      </div>
      
      <div class="form-group">
@@ -175,14 +231,23 @@
       <form:select path="fundador" class="form-control"> 
           <form:option value="1"> Sí </form:option>
                     <form:option value="0"> No </form:option>
+                    
+                    
+ 
 
           
       </form:select>
- 
+           <div class="form-group">
+      <label for = "cuota">Tipo de renovación: </label>
+      <form:select path="cuota" class="form-control"> 
+          <form:option value="1"> Pagado </form:option>
+          <form:option value="0"> Asistencia a encuentro </form:option>
+          
+      </form:select>
      </div>
      
      <div class="form-group">
-      <input type="submit" value="Guardar" class="btn btn-success"/>
+      <input type="submit" value="Guardar" class="btn btn-success" />
       <a href="home" class="btn btn-success"><i class="glyphicon glyphicon-remove-circle"></i>Cancelar</a>
 
      </div>

@@ -5,9 +5,24 @@
  */
 package controller;
 
+import com.fasterxml.jackson.databind.MappingIterator;
+import com.fasterxml.jackson.dataformat.csv.CsvMapper;
+import com.fasterxml.jackson.dataformat.csv.CsvSchema;
 import dao.UserDao;
 import dao.UserDaoImpl;
+import excel.Fila;
+import excel.Lector;
+import static excel.Lector.cogerCad;
+import static excel.Lector.cogerDob;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
 import java.lang.annotation.Annotation;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -15,6 +30,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -47,7 +63,9 @@ import org.springframework.jdbc.core.JdbcTemplate;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.dao.DataAccessException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.messaging.MessagingException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -57,13 +75,16 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 
 import org.springframework.web.bind.annotation.ModelAttribute;
+
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import sun.rmi.transport.Transport;
 
@@ -76,7 +97,7 @@ import sun.rmi.transport.Transport;
 @Controller
 @Scope("session")
 @RequestMapping(value="/")
-@SessionAttributes({"user","tipoListado","textoTipoBusqueda"})
+@SessionAttributes({"tipoListado","textoTipoBusqueda"})
 public class UserController {
     
 
@@ -94,6 +115,27 @@ public class UserController {
     @Autowired
     private UsernamePasswordAuthenticationToken princi;
     
+    private Lector l ;
+    
+    private String fichero;
+
+    private Fila fila;
+
+    public Lector getL() {
+        return l;
+    }
+
+    public void setL(Lector l) {
+        this.l = l;
+    }
+
+    public Fila getFila() {
+        return fila;
+    }
+
+    public void setFila(Fila fila) {
+        this.fila = fila;
+    }
     
     @Autowired
     private List listado;
@@ -102,7 +144,7 @@ public class UserController {
     private List bajas;
     
  
-    
+    private String fileLocation;
     
   
     
@@ -115,6 +157,7 @@ public class UserController {
         Conector con = new Conector();
         this.jdbcTemplate = new JdbcTemplate(con.conectar());
         this.passwordEncoder = new BCryptPasswordEncoder();
+        this.fichero = new String();
     }
 
     public JdbcTemplate getJdbcTemplate() {
@@ -128,10 +171,19 @@ public class UserController {
     
     
     @RequestMapping(value={"/verLista.htm", "/verLista"},method={RequestMethod.POST, RequestMethod.GET})
-    public ModelAndView verLista(HttpSession session,HttpServletRequest request)
+    public ModelAndView verLista(HttpServletRequest request)
     {
         Integer tipoListado = 6;
+        HttpSession session = request.getSession();
         ModelAndView mav=new ModelAndView();
+         Object prueba = session.getAttribute("user");
+  if(prueba == null){
+        mav.setViewName("login");
+
+      
+  }else{
+     
+      
      String tipolistadoString = request.getParameter("tipoListadoNumero");
      if(tipolistadoString != null){
          tipoListado =  Integer.parseInt(request.getParameter("tipoListadoNumero"));
@@ -261,10 +313,12 @@ public class UserController {
       
     }
 
-          
+           }
+           mav.addObject("fichero", fichero);
+           fichero = "";
           return mav;
       
-       
+ 
     }
     
     /*@RequestMapping(value={"/verListaInicial.htm", "/verListaInicial"},method={RequestMethod.POST, RequestMethod.GET})
@@ -316,7 +370,10 @@ public class UserController {
  public ModelAndView verifyLogin(@RequestParam String dni,@RequestParam String password,HttpSession session){
      
        String sql = "SELECT * from user WHERE dni = '" + dni + "' AND actual=1";
+        ModelAndView model = new ModelAndView();
+     
        //Query query = getEm().createQuery(sql);
+       try{
         user =  this.jdbcTemplate.queryForObject(sql, new RowMapper<User>(){
             
            
@@ -345,18 +402,23 @@ public class UserController {
     e.setReciente(rs.getInt(20));
     e.setActivo(rs.getInt(21));
     e.setFundador(rs.getInt(22));
+    e.setPrimerLogin(rs.getInt(27));
     return e;
         }
     });
-        
+       }catch(EmptyResultDataAccessException e){
+             model.setViewName("errorLogin");
+        return model;
+           
+           
+       }
      
            
        
-       ModelAndView model = new ModelAndView();
-           
+            
     //User user = this.userService.findByEmail(email);
     if(user == null){
-        model.setViewName("login");
+        model.setViewName("errorLogin");
         return model;
     }else{
         
@@ -380,11 +442,17 @@ public class UserController {
  @RequestMapping(value= "/home", method=RequestMethod.GET)
  public ModelAndView home(HttpSession session){
   ModelAndView model = new ModelAndView();
+  Object prueba = session.getAttribute("user");
+  if(prueba == null){
+        model.setViewName("login");
+
+      
+  }else{
   model.setViewName("home");
   session.setAttribute("tipoListado", 6);
   session.setAttribute("textoTipoBusqueda", "Datos");
 
-  
+  }
   
   return model;
  }
@@ -393,7 +461,21 @@ public class UserController {
  @RequestMapping(value="/accessDenied", method=RequestMethod.GET)
  public ModelAndView accessDenied(){
   ModelAndView model = new ModelAndView();
-  model.setViewName("errors/access_denied");
+  model.setViewName("access_denied");
+  return model;
+ }
+ 
+  @RequestMapping(value="/loginFallo", method=RequestMethod.GET)
+ public ModelAndView loginFallo(){
+  ModelAndView model = new ModelAndView();
+  model.setViewName("errorLogin");
+  return model;
+ }
+ 
+  @RequestMapping(value="/errorInsercionExcel", method=RequestMethod.GET)
+ public ModelAndView excel(){
+  ModelAndView model = new ModelAndView();
+  model.setViewName("errorInsercion");
   return model;
  }
  
@@ -401,9 +483,17 @@ public class UserController {
 public ModelAndView editUser(HttpServletRequest request,HttpSession session) {
     String userId = request.getParameter("id");
     //User user = this.userService.findById(userId);
-    
+      Object prueba = session.getAttribute("user");
+          ModelAndView model = new ModelAndView();
+
+
+    if(prueba == null){
+        model.setViewName("login");
+
+      
+  }else{
     User userN = this.findById(userId);
-    ModelAndView model = new ModelAndView("userEditForm");
+     model = new ModelAndView("userEditForm");
     model.addObject("contacto", userN);
     
     
@@ -432,7 +522,7 @@ public ModelAndView editUser(HttpServletRequest request,HttpSession session) {
 
     
     
- 
+    }
     return model;
 }
   public User findById(String email) throws DataAccessException {
@@ -466,6 +556,7 @@ public ModelAndView editUser(HttpServletRequest request,HttpSession session) {
     e.setReciente(rs.getInt(20));
     e.setActivo(rs.getInt(21));
     e.setFundador(rs.getInt(22));
+    e.setCuota(rs.getInt(25));
     return e;
         }
     });
@@ -524,7 +615,7 @@ public ModelAndView editUser(HttpServletRequest request,HttpSession session) {
     }
      
      @RequestMapping(value = "/deleteUser", method = RequestMethod.GET)
-public ModelAndView deleteContact(HttpServletRequest request) {
+public String deleteContact(HttpServletRequest request) {
    
     
     String userId = (request.getParameter("id"));
@@ -534,20 +625,30 @@ public ModelAndView deleteContact(HttpServletRequest request) {
     User userN = this.findByIdDeVerdad(userId);
    deleteUser(userN);
  
-   return new ModelAndView("home");
+   //return new ModelAndView("home");
+       return "redirect:/verLista";
+
 }
 
 
 @RequestMapping(value = "/newUser", method = RequestMethod.GET)
-public ModelAndView newUser(HttpServletRequest request) {
+public ModelAndView newUser(HttpServletRequest request,HttpSession session) {
     //String userId = (request.getParameter("id"));
     //User user = this.userService.findById(userId);
     
    // User user = this.findById(userId);
-   
+   Object prueba = session.getAttribute("user");
+          ModelAndView model = new ModelAndView();
+
+
+    if(prueba == null){
+        model.setViewName("login");
+
+      
+  }else{
    User newContact = new User();
    
-    ModelAndView model = new ModelAndView("userNewForm");
+    model = new ModelAndView("userNewForm");
     model.addObject("contacto", newContact);
     String sql = "SELECT nombreReg from regionEsp;";
     List<String> region = this.jdbcTemplate.queryForList(sql, String.class);
@@ -573,15 +674,25 @@ public ModelAndView newUser(HttpServletRequest request) {
             model.addObject("paises",paises);
 
     
- 
+    }
     return model;
 }
 
 
  @RequestMapping(value = "/summary", method = RequestMethod.GET)
-    public ModelAndView verSummary()
+    public ModelAndView verSummary(HttpSession session)
     {
-        ModelAndView mav=new ModelAndView();
+        
+        Object prueba = session.getAttribute("user");
+          ModelAndView model = new ModelAndView();
+
+
+    if(prueba == null){
+        model.setViewName("login");
+
+      
+  }else{
+        
         String sql="SELECT universidad FROM user WHERE actual= 1";
         List<String> universidad = new ArrayList<>();
         Map<String, Tuple<Integer,Integer>> datosFinales = new HashMap<>();
@@ -607,9 +718,11 @@ public ModelAndView newUser(HttpServletRequest request) {
               String consulta2="select count(activo) from user where universidad LIKE '" + univ + "' AND activo=" + 1 + " AND actual=1;"; //Esta consulta es la que falla
               Integer datosNumero2 = this.jdbcTemplate.queryForObject(consulta2,Integer.class);
               
+              if(datosNumero > 0){
               Tuple<Integer,Integer> tupla = new Tuple(datosNumero,datosNumero2);
               
               datosFinales.put(univ, tupla);
+              }
               
        }
        
@@ -641,10 +754,12 @@ public ModelAndView newUser(HttpServletRequest request) {
               Integer datosNumero = this.jdbcTemplate.queryForObject(consulta,Integer.class);
               String consulta2="select count(*) from user where region= '" + univ + "' AND activo= "+ 1 +  " AND actual=1;"; //Esta consulta es la que falla
               Integer datosNumero2 = this.jdbcTemplate.queryForObject(consulta2,Integer.class);
+              
+              if(datosNumero > 0){
               Tuple<Integer,Integer> tupla = new Tuple(datosNumero,datosNumero2);
               
               datosRegion.put(univ, tupla);
-           
+              }
        }
        
        
@@ -678,21 +793,26 @@ public ModelAndView newUser(HttpServletRequest request) {
    Tuple<Integer,Integer> datosMujeresTupla = new Tuple<>(datosMujeres,datosMujeresActivas);
        
        // List datos = this.userService.obtenerLista(); //Prueba de UserDao
-        mav.addObject("datosFinales",datosFinales);
-        mav.addObject("datosRegion",datosRegion);
-        mav.addObject("datosMujeres",datosMujeresTupla);
-        mav.setViewName("summary");
-        return mav;
+        model.addObject("datosFinales",datosFinales);
+        model.addObject("datosRegion",datosRegion);
+        model.addObject("datosMujeres",datosMujeresTupla);
+        model.setViewName("summary");
+        
+    }
+    return model;
     }
     
   @RequestMapping(value = "/logout", method = RequestMethod.GET)
   public final String logoutPage( HttpServletRequest request,
        HttpServletResponse response) {
     final Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+    HttpSession session = request.getSession(false);
+
+    session.invalidate();
     if (auth != null) {
       new SecurityContextLogoutHandler().logout(request, response, auth);
     }
-    return "redirect:/login?logout";
+    return "redirect:/login";
 	  }
 
   
@@ -719,7 +839,7 @@ public ModelAndView saveContact(@Valid @ModelAttribute("contacto") User contacto
     }
 */
   @RequestMapping(value = "/saveContactEdit", method = RequestMethod.POST)
-public ModelAndView saveContact(@Valid @ModelAttribute("contacto") User contacto) {
+public String saveContact(@Valid @ModelAttribute("contacto") User contacto) {
     
     Grupo grupo = this.findByNombreGrupo(contacto.getGrupoInvestigacion());
     Date fecha = new Date();
@@ -758,6 +878,8 @@ public ModelAndView saveContact(@Valid @ModelAttribute("contacto") User contacto
     e.setReciente(rs.getInt(20));
     e.setActivo(rs.getInt(21));
     e.setFundador(rs.getInt(22));
+    e.setCuota(rs.getInt(25));
+    e.setNombreEmpresa(rs.getString(26));
     return e;
         }
     });
@@ -778,8 +900,8 @@ public ModelAndView saveContact(@Valid @ModelAttribute("contacto") User contacto
        if(pass){
     
     
-     String sql = "INSERT INTO user (user_id,fecha,orcid,dni,password,apellido2,apellido1,nombre,sexo,dblppersonname,authorkey,role,universidad,region,empresa,pais,email,grupoInvestigacion,antiguedad,reciente,activo,fundador,actual)" +
-             "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)";
+     String sql = "INSERT INTO user (user_id,fecha,orcid,dni,password,apellido2,apellido1,nombre,sexo,dblppersonname,authorkey,role,universidad,region,empresa,pais,email,grupoInvestigacion,antiguedad,reciente,activo,fundador,actual,cuota,nombreEmpresa)" +
+             "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?, ?,?)";
         jdbcTemplate.update(sql, contacto.getUser_id(), fecha,
                 contacto.getOrcid(), contacto.getDni(),contacto.getPassword(),contacto.getApellido2(),
                 contacto.getApellido1(),contacto.getNombre(),contacto.getSexo(),
@@ -791,12 +913,14 @@ public ModelAndView saveContact(@Valid @ModelAttribute("contacto") User contacto
                 contacto.getReciente(),
                 contacto.getActivo(),
                 contacto.getFundador(),
-                1);
+                1,
+                contacto.getCuota(),
+                contacto.getNombreEmpresa());
         
         
        }else{
-            String sql = "INSERT INTO user (user_id,fecha,orcid,dni,password,apellido2,apellido1,nombre,sexo,dblppersonname,authorkey,role,universidad,region,empresa,pais,email,grupoInvestigacion,antiguedad,reciente,activo,fundador,actual)" +
-             "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)";
+            String sql = "INSERT INTO user (user_id,fecha,orcid,dni,password,apellido2,apellido1,nombre,sexo,dblppersonname,authorkey,role,universidad,region,empresa,pais,email,grupoInvestigacion,antiguedad,reciente,activo,fundador,actual,cuota,nombreEmpresa)" +
+             "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?, ?,?)";
         jdbcTemplate.update(sql, contacto.getUser_id(), fecha,
                 contacto.getOrcid(), contacto.getDni(),this.passwordEncoder.encode(contacto.getPassword()),contacto.getApellido2(),
                 contacto.getApellido1(),contacto.getNombre(),contacto.getSexo(),
@@ -808,12 +932,13 @@ public ModelAndView saveContact(@Valid @ModelAttribute("contacto") User contacto
                 contacto.getReciente(),
                 contacto.getActivo(),
                 contacto.getFundador(),
-                1);
+                1,contacto.getCuota(),
+                contacto.getNombreEmpresa());
        }
      
     ModelAndView mv = new ModelAndView("home");
     
-    return mv;
+    return "redirect:/verLista";
 
 
     }
@@ -824,29 +949,40 @@ public ModelAndView saveContact(@Valid @ModelAttribute("contacto") User contacto
         
         Grupo grupo = this.findByNombreGrupo(contacto.getGrupoInvestigacion());
         Date fecha = new Date();
+           ModelAndView mv = new ModelAndView();
+
         
         
         if(grupo == null){
             contacto.setGrupoInvestigacion(null);
         }
         
+        String prueba = "SELECT count(*) from user where user_id=?";
+      int count=  this.jdbcTemplate.queryForInt(prueba, contacto.getUser_id());
+      
+      if(count == 0){
+        
      
        
         
-    String sql = "INSERT INTO user (user_id,orcid,fecha,dni,password,apellido2,apellido1,nombre,sexo,dblppersonname,authorkey,role,universidad,region,empresa,pais,email,grupoInvestigacion,antiguedad,reciente,activo,fundador,actual)"
-                    + " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)";
+    String sql = "INSERT INTO user (user_id,orcid,fecha,dni,password,apellido2,apellido1,nombre,sexo,dblppersonname,authorkey,role,universidad,region,empresa,pais,email,grupoInvestigacion,antiguedad,reciente,activo,fundador,actual,cuota,nombreEmpresa)"
+                    + " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?,?,?)";
         jdbcTemplate.update(sql,contacto.getUser_id(),contacto.getOrcid(),fecha,contacto.getDni(),  this.passwordEncoder.encode(contacto.getPassword()),
                 contacto.getApellido2(), contacto.getApellido1(),contacto.getNombre(),
                 contacto.getSexo(),contacto.getDblppersonname(),contacto.getAuthorkey(),contacto.getRole(),
                 contacto.getUniversidad(),contacto.getRegion(),contacto.getEmpresa(),contacto.getPais(),contacto.getEmail(),contacto.getGrupoInvestigacion(),contacto.getAntiguedad(),
-                contacto.getReciente(),contacto.getActivo(),contacto.getFundador(),1);
+                contacto.getReciente(),contacto.getActivo(),contacto.getFundador(),1, contacto.getCuota(),contacto.getNombreEmpresa());
    
+        mv = new ModelAndView("home");
         
-        
-       
+      }else{
+          
+          mv = new ModelAndView("errorInsercion");
+          
+      }
       
              
-   ModelAndView mv = new ModelAndView("home");
+    
     
     return mv;
 }
@@ -859,7 +995,16 @@ public ModelAndView grupoUser(HttpServletRequest request,HttpSession session) {
     //User user = this.userService.findById(userId);
     
     Grupo grupo = this.findByNombreGrupo(userId);
-    ModelAndView model = new ModelAndView("grupoUser");
+    Object prueba = session.getAttribute("user");
+          ModelAndView model = new ModelAndView();
+
+
+    if(prueba == null){
+        model.setViewName("login");
+
+      
+  }else{
+     model = new ModelAndView("grupoUser");
     
     
   
@@ -869,7 +1014,7 @@ public ModelAndView grupoUser(HttpServletRequest request,HttpSession session) {
     model.addObject("grupoN", grupo);
     model.addObject("lider",nombreLider);
     model.addObject("corresponsal",nombreCorresponsal);
- 
+    }
     return model;
 }
 
@@ -938,6 +1083,8 @@ public User findByIdDeVerdad(String id) throws DataAccessException {
     e.setReciente(rs.getInt(20));
     e.setActivo(rs.getInt(21));
     e.setFundador(rs.getInt(22));
+    e.setCuota(rs.getInt(25));
+    e.setNombreEmpresa(rs.getString(26));
     return e;
         }
     });
@@ -952,14 +1099,22 @@ public User findByIdDeVerdad(String id) throws DataAccessException {
 public ModelAndView verHistorial(HttpServletRequest request,HttpSession session) {
     String userId = request.getParameter("id");
     //User user = this.userService.findById(userId);
-    
+    Object prueba = session.getAttribute("user");
+          ModelAndView model = new ModelAndView();
+
+
+    if(prueba == null){
+        model.setViewName("login");
+
+      
+  }else{
     List userN = this.listFindById(userId);
-    ModelAndView model = new ModelAndView("verHistorial");
+     model = new ModelAndView("verHistorial");
     model.addObject("historial", userN);
     
     
     
-  
+    }
  
     return model;
 }
@@ -982,10 +1137,18 @@ public List listFindById(String id) throws DataAccessException {
 public ModelAndView verBajas(HttpServletRequest request,HttpSession session) {
    
     //User user = this.userService.findById(userId);
-    
+    Object prueba = session.getAttribute("user");
+          ModelAndView model = new ModelAndView();
+
+
+    if(prueba == null){
+        model.setViewName("login");
+
+      
+  }else{
     bajas = this.findPosiblesBajas();
     List<Map<String,Object>> emails = this.findPosiblesBajasEmail();
-    ModelAndView model = new ModelAndView("verBajas");
+     model = new ModelAndView("verBajas");
     model.addObject("bajas", bajas);
     List email = new ArrayList<>(); 
     Collection<Object> values = new ArrayList<>();
@@ -1002,7 +1165,7 @@ public ModelAndView verBajas(HttpServletRequest request,HttpSession session) {
      Object[] a = email.toArray();
    System.out.println(email.get(0));
     model.addObject("emails",email);
-    
+    }
     return model;
 }
 
@@ -1168,7 +1331,7 @@ public ModelAndView cambiarPassFinal(@RequestParam String dni,@RequestParam Stri
     
      String up = "UPDATE user SET newPass = 0, password=?  WHERE dni=? AND actual=1";
       jdbcTemplate.update(up,this.passwordEncoder.encode(password),dni);
-      String persona = "SELECT user_id FROM user WHERE dni LIKE ?";
+      String persona = "SELECT user_id FROM user WHERE dni LIKE ? and actual=1";
       Object[] param = {dni};
       String us = jdbcTemplate.queryForObject(persona, param, String.class);
     String delete = "DELETE FROM recPass where user_id LIKE ?";
@@ -1186,6 +1349,281 @@ public ModelAndView cambiarPassFinal(@RequestParam String dni,@RequestParam Stri
     
     
 }
+
+@RequestMapping(value="/loginSecurity", method=RequestMethod.GET)
+public String loginJ() {
+	return "loginSecurity";
+}
+
+
+@RequestMapping(method = RequestMethod.POST, value = "/uploadExcelFile")
+public ModelAndView uploadFile(Model model, @RequestParam(value = "file") MultipartFile file) throws IOException {
+    InputStream in = file.getInputStream();
+     ModelAndView mw = new ModelAndView();
+
+    File currDir = new File(".");
+    String path = currDir.getAbsolutePath();
+    fileLocation = path.substring(0, path.length() - 1) + file.getOriginalFilename();
+    
+    FileOutputStream f = new FileOutputStream(fileLocation);
+  
+    int ch = 0;
+    while ((ch = in.read()) != -1) {
+        f.write(ch);
+    }
+    f.flush();
+    f.close();
+    model.addAttribute("message", "File: " + file.getOriginalFilename() 
+      + " has been uploaded successfully!");
+    mw.setViewName("home");
+    
+    
+    
+    this.readPOI();
+    
+    return mw;
+  
+ 
+   // return "readPOI";
+}
+
+@RequestMapping(method = RequestMethod.GET, value = "/readPOI")
+public ModelAndView readPOI() throws IOException {
+     
+  if(fichero.isEmpty() || fichero.equals("")){
+      fichero = "";
+  }
+    
+         ModelAndView model = new ModelAndView();
+         List<Fila> prove = new ArrayList<>();
+
+  if (fileLocation != null) {
+      if (fileLocation.endsWith(".xlsx") || fileLocation.endsWith(".xls")) {
+          try{
+        this.l = new Lector(fileLocation);
+               prove =   l.getFile();
+               if(prove.isEmpty()){
+                   System.out.println("HE ENTRADO");
+               }else{
+                   int i = 2;
+                   for(Fila f : prove){
+                       this.fila = f;
+                       
+                       if(!"".equals(this.fila.getUser_id())){
+                          int prueba = this.comprobarId(this.fila.getUser_id());  
+                          if(prueba ==0){
+                              try{
+               this.insertarExcel(fila);
+                              }catch(Exception e){
+                                this.fichero  = fichero + "ERROR LÍNEA " + i+  ": Error en la inserción, utilice la plantilla facilitada.\n";
+
+                              }
+                          }else{
+                         this.fichero  = fichero + "ERROR LÍNEA " +i+": ID ya existente en el portal\n";
+
+                          }
+                       }
+                       i++;
+                   }
+               }
+          }catch(Exception e){
+                                       this.fichero  = fichero + "Error en el archivo, utilice la plantilla por favor";
+
+          }
+      } else {
+         //importacion CSV
+         
+         this.loadObjectList(fileLocation);
+        
+      }
+  } else {
+      model.addObject("message", "File missing! Please upload an excel file.");
+  }
+  
+  if(fichero.isEmpty() || fichero.equals("")){
+      fichero = "Inserción realizada con exito";
+  }
+ 
+    model.setViewName("verLista");
+  return model;
+}
+
+
+private void insertarExcel(Fila f){
+    
+     Date fecha = new Date();
+   
+     int empresa=0;
+     int activo = 0;
+     int fundador = 0;
+     String pais;
+     if(f.getEmpresa().equalsIgnoreCase("Si") || f.getEmpresa().equalsIgnoreCase("Sí")){
+         empresa=1;
+     }else{
+         empresa=0;
+     }
+        if(f.getActivo().equalsIgnoreCase("Sí") ||f.getActivo().equalsIgnoreCase("Si")){
+         activo=1;
+     }else{
+         activo=0;
+     }
+     
+     if(f.getForeigner() == null){
+         pais = "ES España";
+     }else{
+         pais = f.getForeigner();
+     }
+     if(f.getUser_id().charAt(2) == 'F'){
+         fundador = 1;
+     }
+     
+     
+     
+   
+
+    String sql = "INSERT INTO user (user_id,fecha,orcid,dni,password,apellido2,apellido1,nombre,sexo,dblppersonname,authorkey,role,universidad,region,empresa,pais,email,grupoInvestigacion,antiguedad,reciente,activo,fundador,actual,primerLogin)" +
+             "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?,?)";
+        jdbcTemplate.update(sql, f.getUser_id(), fecha,
+                null, f.getEmail(),this.passwordEncoder.encode(f.getEmail()),f.getApellido2(),
+                f.getApellido1(),f.getNombre(),f.getSexo(),
+                f.getDblppersoname(),f.getDblpauthorkey(),0,f.getUniversidad(),
+               f.getRegion(),empresa,pais,
+                f.getEmail(),
+                null,
+                f.getAntiguedad(),
+                f.getReciente(),
+                activo,
+                fundador,
+                1,
+                1);
+        
+   
+  
+}
+
+
+public int comprobarId(String id){
+    Integer n;
+     String sql = "SELECT count(*) from user WHERE user_id LIKE '" + id + "' AND actual=1;";
+     n = this.jdbcTemplate.queryForObject(sql, Integer.class);
+    
+    return n;
+}
+
+
+public void loadObjectList(String fileLocation) {
+    
+        BufferedReader br = null;
+        String line = "";
+        String cvsSplitBy = ";";
+   try {
+            br = new BufferedReader(new FileReader(new File(fileLocation)));
+            br.readLine();
+            int i = 2;
+            while ((line = br.readLine()) != null) {
+
+                
+                // use comma as separator
+                String[] country = line.split(cvsSplitBy);
+                
+               Fila f = this.lectura(country);
+               int prueba = this.comprobarId(f.getUser_id());  
+                          if(prueba ==0){
+                              try{
+               this.insertarExcel(f);
+                              }catch(Exception e){
+                                this.fichero  = fichero + "ERROR LÍNEA " + i+": Error en la inserción, utilice la plantilla facilitada.\n";
+
+                         
+                              }
+                          }else{
+                         this.fichero  = fichero + "ERROR LÍNEA " +i+ ": ID ya existente en el portal\n";
+
+                          }
+               i++;
+            }
+
+        } catch (FileNotFoundException e) {
+            this.fichero = this.fichero + "Fichero no encontrado\n";
+        } catch (IOException e) {
+            this.fichero = this.fichero + "Error de formato\n";
+        }finally {
+            if (br != null) {
+                try {
+                    br.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+}
+
+
+
+    private Fila lectura(String[] prueba){
+         Fila f = new Fila();
+         f.setUser_id(prueba[0]);
+        
+         f.setApellido1(prueba[1]);
+         f.setApellido2(prueba[2]);
+         f.setNombre(prueba[3]);
+         f.setSexo(prueba[4]);
+         f.setDblppersoname(prueba[5]);
+         f.setDblpauthorkey(prueba[6]);
+         f.setUniversidad(prueba[8]);
+         f.setRegion(prueba[9]);
+         f.setEmpresa(prueba[10]);
+         f.setCentro(prueba[11]);
+         f.setForeigner(prueba[12]);
+         f.setEmail(prueba[13]);
+         f.setAntiguedad(Integer.parseInt(prueba[17]));
+         f.setActivo(prueba[18]);
+         f.setReciente(Integer.parseInt(prueba[19]));
+         
+         
+         return f;
+         
+         
+
+        
+       
+       
+    }
+    
+    public void generarArchivoCSV(String file){
+        final String delim = ";";
+        final String NEXT_LINE = "\n";
+        final String elementos[] = {"ID", "Apellido 1","Apellido 2","Nombre","Sexo","dblpperson name","dblp author key","Grupo","Universidad/Centro","Region","Empresa", "Centro", "Foreigner", 
+            "Email(s)", "responsable", "Corresponsal", "Junta Dir." ,"Antiguedad" , "ACTIVO?", "reciente"};
+        final String ejemplo[] = {"SN00162", "App1_90","App2_90","Nombre_90","M","Nombre_90 App1_90","homepages/Nombre_90App1_90","","UCLM","Castilla-La Mancha","", "", "ES España", 
+            "email_90", "", "", "" ,"2010" , "Sí", "2017"};
+																																		
+        try {
+			FileWriter fw = new FileWriter(file);
+
+                        
+                        for(int i = 0; i< elementos.length ; i++){
+			
+			
+
+			fw.append(elementos[i]);
+			fw.append(delim);
+		
+                        }
+			fw.append(NEXT_LINE);
+                        for(int j=0; j< ejemplo.length; j++){
+			fw.append(ejemplo[j]);
+                        fw.append(delim);
+
+                        }
+			fw.flush();
+			fw.close();
+		} catch (IOException e) {
+			// Error al crear el archivo, por ejemplo, el archivo 
+			// está actualmente abierto.
+			e.printStackTrace();
+		}
+    }
    
    
 

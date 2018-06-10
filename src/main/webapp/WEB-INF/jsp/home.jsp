@@ -17,8 +17,11 @@
  <script src=”https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.21/jquery-ui.min.js”></script>
  <script src="https://cdn.rawgit.com/sergiottellez/TFG/bdcde6b0/src/main/webapp/WEB-INF/jsp/confirmar.js"> </script>
 <title>Home</title>
+
+
 </head>
-<body>
+<body <c:if test="${popup == true}"> onunload="alert('${fichero}')" </c:if> >
+    
   
     
         

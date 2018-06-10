@@ -41,9 +41,14 @@
 			<input type="text" id="dni" name="dni"  placeholder="DNI"
 				class="form-control" required="true"/> <br/> 
 			 <br /> 
-                      
 			<button class="btn btn-lg btn-primary btn-block" name="Submit" value="Aceptar" type="Submit" >Aceptar</button>
-		</form>
+                        <a href="login" class="btn  btn-primary btn-primary btn-block alert-danger"></i>Cancelar </a>
+
+                 </form>
+                
+                   
+
+
 	</div>
 </body>
 </html>

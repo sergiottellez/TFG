@@ -33,6 +33,10 @@ function campoBusqueda(elem){
 
       campoTxt.style.display='none';
     break;
+    case "7":
+
+      campoTxt.style.display='none';
+    break;
     
   }
             }

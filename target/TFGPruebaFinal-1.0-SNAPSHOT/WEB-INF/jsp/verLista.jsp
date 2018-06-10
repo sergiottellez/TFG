@@ -20,6 +20,8 @@
 <head>
     <link rel="shortcut icon" href="https://cdn.rawgit.com/sergiottellez/TFG/289ded45/src/main/webapp/WEB-INF/jsp/images/logo069_400x400.ico">
  <title>LISTADO SOCIOS</title>
+<script src="https://cdn.rawgit.com/sergiottellez/TFG/b4668f82/src/main/webapp/WEB-INF/jsp/jquery.min.js"> </script>
+        <script src="https://cdn.rawgit.com/sergiottellez/TFG/b4668f82/src/main/webapp/WEB-INF/jsp/bootstrap.min.js" > </script>
 
 
 
@@ -28,8 +30,7 @@
  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
   <script async="async" src="https://cdn.rawgit.com/sergiottellez/TFG/165c8450/src/main/webapp/WEB-INF/jsp/ControlListado.js"/>
 
- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
  <script src="https://cdn.rawgit.com/sergiottellez/TFG/bdcde6b0/src/main/webapp/WEB-INF/jsp/confirmar.js"></script>
  <script src="https://cdn.rawgit.com/sergiottellez/TFG/407a3959/src/main/webapp/WEB-INF/jsp/crearCSV.js"> </script>
  <script src="https://cdn.rawgit.com/sergiottellez/TFG/583a1506/src/main/webapp/WEB-INF/jsp/generarLog.js"> </script>
@@ -82,9 +83,9 @@ li a:hover {
 
 </ul>  
               
-<div class="container-fluid">
+<div class="container-fluid" style="width: 100%;">
  <div class="row-fluid">
-  <div class="col-md-6">
+     <div class="col-md-6" style="width: 100%;">
    <h4 class="text-center">Lista de SOCIOS. USUARIO:</h4>
    
    
@@ -102,6 +103,7 @@ li a:hover {
                                 <option value = "4" itemLabel = "Región" label="Region"/> 
                                 <option value = "3" itemLabel = "Activos" label="Usuarios Activos" />
                                 <option value = "5" itemLabel = "Nombre" label="Nombre" />
+                                <option value = "7" itemLabel = "Externos" label="Externos" />
                                 <option value = "6" itemLabel = "Todos" label="Todos" />
        
                             </select>
@@ -116,11 +118,12 @@ li a:hover {
                     </div>
                
    <hr>
-   <div class="table table-striped">
-       <table id="tabletocsv" style="margin: auto;"  class="table table-bordered table-striped">
+   <div class="table table-striped" style="width: 100%;" >
+       <table id="tabletocsv"   class="table table-bordered table-striped" >
+           <div>
     <thead>
     <tr>
-     <th scope="col">Email</th>
+     <th>Email</th>
      <th>Nombre</th>
      <th>Apellido1</th>
     <th>Apellido2</th>
@@ -138,6 +141,8 @@ li a:hover {
       <c:if test="${sessionScope.user.role == 1}" > <th>Eliminar</th></c:if>
     </tr>
     </thead>
+    </div>
+    
     <tbody>
     <c:forEach var="users" items="${datos}">
      <tr>
@@ -163,13 +168,10 @@ li a:hover {
     </c:forEach>    
     </tbody>
    </table>
+    
    </div>
    <br />
    
-   <a href="home" class="btn btn-success"><i class="glyphicon glyphicon-edit"></i>Home</a>
-     <c:if test="${user.role == 1}" > <a href="newUser" class="btn btn-success" >
- <i class="glyphicon glyphicon-edit"></i> Nuevo Socio</a> </c:if> 
-   <a href="summary" class="btn btn-success"><i class="glyphicon glyphicon-edit"></i>Summary </a>
    <button onClick="crearCSV()" class="btn btn-success"> <c:if test="${user.role == 1}" > Exportar a CSV</button></c:if> 
 <br/>
 <br/>
@@ -180,7 +182,7 @@ li a:hover {
  <br/>
   <c:if test="${user.role == 1}" >  <c:url value="/uploadExcelFile" var="uploadFileUrl" />
 <form method="post" enctype="multipart/form-data"
-  action="${uploadFileUrl}">
+      action="${uploadFileUrl}" >
     <input type="file" name="file" accept=".xls,.xlsx, .csv" /> <input
         type="submit" value="Importar archivo" class="btn btn-success " />
 </form>  </a> </c:if> 

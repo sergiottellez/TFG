@@ -16,5 +16,8 @@
 </head>
 <body>
  <h1>Error en el login, DNI y/o contraseña incorrectos. Vuelva a intentarlo o recupere su contraseña.</h1>
+ 
+  <a href="login" class="btn  btn-primary btn-primary btn-block btn-block"></i>Volver </a>
+
 </body>
 </html>

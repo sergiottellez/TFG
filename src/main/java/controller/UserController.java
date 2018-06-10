@@ -29,6 +29,7 @@ import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
@@ -199,7 +200,31 @@ public class UserController {
             
         }else{
             this.listado = (ArrayList) session.getAttribute("listado");
-        }
+        } 
+        
+       String prueba12 = (request.getParameter("anio"));
+       String prueba22 = request.getParameter("tipo");
+       Integer anio = null;
+       
+       if(prueba12 != null){
+          anio =  Integer.parseInt(prueba12);
+       }
+       
+       if(anio != null && prueba22 != null){
+           
+           
+           String q = "SELECT * FROM user WHERE antiguedad=? and actual=1;";
+           listado = this.jdbcTemplate.query(q,new UserRowMapper(),anio);
+           mav.addObject("datos",listado);
+           mav.setViewName("verLista");
+           
+       }else if(prueba22 == null && anio != null){
+              String q = "SELECT * FROM user WHERE reciente=? and actual=1;";
+           listado = this.jdbcTemplate.query(q,new UserRowMapper(),anio);
+           mav.addObject("datos",listado);
+           mav.setViewName("verLista");
+           
+       }else{
        
            switch (tipoListado) {
             case 0: //Email
@@ -307,6 +332,16 @@ public class UserController {
                     mav.setViewName("verLista");
                    
                 break;
+                
+                
+            case 7: //Exterior
+                String ql="SELECT * from user where user_id LIKE '%EXT%' ";
+                 listado=this.jdbcTemplate.queryForList(ql);
+       // List datos = this.userService.obtenerLista(); //Prueba de UserDao
+                    mav.addObject("datos",listado);
+            
+                    mav.setViewName("verLista");
+                    break;
         
        
        // List datos = this.userService.obtenerLista(); //Prueba de UserDao
@@ -314,6 +349,7 @@ public class UserController {
     }
 
            }
+  }
            mav.addObject("fichero", fichero);
            fichero = "";
           return mav;
@@ -441,6 +477,7 @@ public class UserController {
  
  @RequestMapping(value= "/home", method=RequestMethod.GET)
  public ModelAndView home(HttpSession session){
+     boolean popup = true;
   ModelAndView model = new ModelAndView();
   Object prueba = session.getAttribute("user");
   if(prueba == null){
@@ -449,6 +486,15 @@ public class UserController {
       
   }else{
   model.setViewName("home");
+  model.addObject("fichero", fichero);
+  if(fichero.equals("")){
+    popup = false;
+    
+  }else{
+      popup=true;
+  }
+  fichero = "";
+  model.addObject("valor", popup);
   session.setAttribute("tipoListado", 6);
   session.setAttribute("textoTipoBusqueda", "Datos");
 
@@ -476,6 +522,12 @@ public class UserController {
  public ModelAndView excel(){
   ModelAndView model = new ModelAndView();
   model.setViewName("errorInsercion");
+  return model;
+ }
+   @RequestMapping(value="/error", method=RequestMethod.GET)
+ public ModelAndView error(){
+  ModelAndView model = new ModelAndView();
+  model.setViewName("error");
   return model;
  }
  
@@ -701,8 +753,8 @@ public ModelAndView newUser(HttpServletRequest request,HttpSession session) {
        
        for(String s : datosUniversidadLista){ //Metemos todas las universidades de la BD
            
-           if(!universidad.contains(s)){
-               universidad.add( s);
+           if(!universidad.contains(s) && !s.equals(" ")){
+               universidad.add(s);
                
            }
            
@@ -781,21 +833,55 @@ public ModelAndView newUser(HttpServletRequest request,HttpSession session) {
         
        
   Integer datosTotales = this.jdbcTemplate.queryForObject(sql4,Integer.class);   
-  
+  if(datosMujeres > 0){
   datosMujeresActivas = (datosMujeresActivas*100)/datosMujeres;
   datosMujeres = (datosMujeres*100)/datosTotales;
-  
+  }
        
        
        
   
   
    Tuple<Integer,Integer> datosMujeresTupla = new Tuple<>(datosMujeres,datosMujeresActivas);
+   
+   
+   
+   
+   Integer aniocont = 2010;
+           Calendar cal= Calendar.getInstance();
+int year= cal.get(Calendar.YEAR);
+           
+        List<Integer> aniosjiji = new ArrayList<>();
+        while(aniocont < year){
+            
+            aniosjiji.add(aniocont);
+                   
+           aniocont++; 
+        }
+        Map<Integer, Tuple<Integer,Integer>> datosFinalesjiji = new HashMap<>();
+        
+       
+       
+       for(Integer univ : aniosjiji){
+           //Buscamos por cada universidad el numero total que hay
+              String consulta="select count(*) from user where antiguedad = " + univ + " AND actual=1;"; //Esta consulta es la que falla
+              Integer datosNumero = this.jdbcTemplate.queryForObject(consulta,Integer.class);
+              String consulta2="select count(activo) from user where reciente = " + univ + " AND activo=" + 1 + " AND actual=1;"; //Esta consulta es la que falla
+              Integer datosNumero2 = this.jdbcTemplate.queryForObject(consulta2,Integer.class);
+              
+              if(datosNumero > 0){
+              Tuple<Integer,Integer> tuplanueva = new Tuple(datosNumero,datosNumero2);
+                
+              datosFinalesjiji.put(univ, tuplanueva);
+              }
+              
+       }
        
        // List datos = this.userService.obtenerLista(); //Prueba de UserDao
         model.addObject("datosFinales",datosFinales);
         model.addObject("datosRegion",datosRegion);
         model.addObject("datosMujeres",datosMujeresTupla);
+        model.addObject("datosanios",datosFinalesjiji);
         model.setViewName("summary");
         
     }
@@ -847,7 +933,7 @@ public String saveContact(@Valid @ModelAttribute("contacto") User contacto) {
     if(grupo == null){
         contacto.setGrupoInvestigacion(null);
     }
-  
+  try{
         String sql1 = "SELECT * from user WHERE user_id LIKE '" + contacto.getUser_id() + "';";
        //Query query = getEm().createQuery(sql);
        List userLista =  this.jdbcTemplate.query(sql1, new RowMapper<User>(){
@@ -900,8 +986,8 @@ public String saveContact(@Valid @ModelAttribute("contacto") User contacto) {
        if(pass){
     
     
-     String sql = "INSERT INTO user (user_id,fecha,orcid,dni,password,apellido2,apellido1,nombre,sexo,dblppersonname,authorkey,role,universidad,region,empresa,pais,email,grupoInvestigacion,antiguedad,reciente,activo,fundador,actual,cuota,nombreEmpresa)" +
-             "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?, ?,?)";
+     String sql = "INSERT INTO user (user_id,fecha,orcid,dni,password,apellido2,apellido1,nombre,sexo,dblppersonname,authorkey,role,universidad,region,empresa,pais,email,grupoInvestigacion,antiguedad,reciente,activo,fundador,actual,cuota,nombreEmpresa,primerLogin)" +
+             "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?, ?,?,?)";
         jdbcTemplate.update(sql, contacto.getUser_id(), fecha,
                 contacto.getOrcid(), contacto.getDni(),contacto.getPassword(),contacto.getApellido2(),
                 contacto.getApellido1(),contacto.getNombre(),contacto.getSexo(),
@@ -915,7 +1001,8 @@ public String saveContact(@Valid @ModelAttribute("contacto") User contacto) {
                 contacto.getFundador(),
                 1,
                 contacto.getCuota(),
-                contacto.getNombreEmpresa());
+                contacto.getNombreEmpresa(),
+                0);
         
         
        }else{
@@ -935,11 +1022,15 @@ public String saveContact(@Valid @ModelAttribute("contacto") User contacto) {
                 1,contacto.getCuota(),
                 contacto.getNombreEmpresa());
        }
-     
+  }catch(Exception e){
+      return "error";
+  }
     ModelAndView mv = new ModelAndView("home");
-    
+    if(contacto.getRole() == 1){
     return "redirect:/verLista";
-
+    }else{
+        return "home";
+    }
 
     }
 
@@ -957,13 +1048,15 @@ public String saveContact(@Valid @ModelAttribute("contacto") User contacto) {
             contacto.setGrupoInvestigacion(null);
         }
         
+        try{
+        
         String prueba = "SELECT count(*) from user where user_id=?";
       int count=  this.jdbcTemplate.queryForInt(prueba, contacto.getUser_id());
       
       if(count == 0){
         
      
-       
+       try{
         
     String sql = "INSERT INTO user (user_id,orcid,fecha,dni,password,apellido2,apellido1,nombre,sexo,dblppersonname,authorkey,role,universidad,region,empresa,pais,email,grupoInvestigacion,antiguedad,reciente,activo,fundador,actual,cuota,nombreEmpresa)"
                     + " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?,?,?)";
@@ -974,14 +1067,20 @@ public String saveContact(@Valid @ModelAttribute("contacto") User contacto) {
                 contacto.getReciente(),contacto.getActivo(),contacto.getFundador(),1, contacto.getCuota(),contacto.getNombreEmpresa());
    
         mv = new ModelAndView("home");
-        
+       }catch(Exception e){
+           mv = new ModelAndView("error");
+           
+       }
       }else{
           
-          mv = new ModelAndView("errorInsercion");
+          mv = new ModelAndView("error");
           
       }
       
-             
+        }catch(Exception e){
+                       mv = new ModelAndView("error");
+
+        } 
     
     
     return mv;
@@ -1108,11 +1207,14 @@ public ModelAndView verHistorial(HttpServletRequest request,HttpSession session)
 
       
   }else{
+        try{
     List userN = this.listFindById(userId);
      model = new ModelAndView("verHistorial");
     model.addObject("historial", userN);
     
-    
+        }catch(Exception e){
+            model = new ModelAndView("error");
+        }
     
     }
  
@@ -1477,6 +1579,14 @@ private void insertarExcel(Fila f){
          fundador = 1;
      }
      
+     if(f.getUniversidad().length() <=5){
+            String consulta="select nombreUniv from universidad where siglasUni LIKE '%" + f.getUniversidad() + "';"; //Esta consulta es la que falla
+              String universidad = this.jdbcTemplate.queryForObject(consulta,String.class);
+              if(universidad != null){
+              f.setUniversidad(universidad);
+              }
+     }
+     
      
      
    
@@ -1624,6 +1734,14 @@ public void loadObjectList(String fileLocation) {
 			e.printStackTrace();
 		}
     }
+    
+    
+
+
+    
+    
+    
+    
    
    
 

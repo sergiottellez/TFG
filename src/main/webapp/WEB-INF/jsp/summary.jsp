@@ -106,8 +106,8 @@ li a:hover {
    </table>
    <br />
    
-    </tbody>
-   </table>
+   
+
    
     <h3 class="text-center">Region</h3>
    <table class="table table-bordered table-striped">
@@ -134,8 +134,7 @@ li a:hover {
    </table>
    <br />
    
-    </tbody>
-   </table>
+ 
    <br />
    
    
@@ -162,8 +161,31 @@ li a:hover {
    </table>
    <br />
    
+   
+   <h3 class="text-center">Socios por año</h3>
+  <table class="table table-bordered table-striped">
+    <thead>
+        
+    <tr>
+     <th>Año</th>
+     <th>Nuevos</th>
+     <th>Renovaciones</th>
+    
+    </tr>
+    </thead>
+    <tbody>
+    <c:forEach var="nuevo" items="${datosanios}">
+     <tr>
+      <td><c:out value="${nuevo.key}"/></td>
+      <td> <a href='verLista?anio=${nuevo.key}&tipo=${nuevo.value.x}'> <c:out value="${nuevo.value.x}"/> </td> </a>
+      <td> <a href='verLista?anio=${nuevo.key}'><c:out value="${nuevo.value.y}"/> </td></a>
+    
+     
+        </tr>
+    </c:forEach>    
     </tbody>
    </table>
+   <br />
    <br />
    <a href="home" class="btn btn-success"><i class="glyphicon glyphicon-edit"></i>Home</a>
    <a href="verLista" class="btn btn-success"><i class="glyphicon glyphicon-edit"></i>Socios SISTEDES</a>

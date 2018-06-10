@@ -146,7 +146,7 @@ li a:hover {
           
       </form:select></c:if>
 
-            <c:if test="${sessionScope.user.role==0}"><form:input path="role" class="form-control" readonly="true"/> ADMIN = 1</c:if>
+            <c:if test="${sessionScope.user.role==0}"><form:input path="role" class="form-control" readonly="true"/></c:if>
      </div>
      
      <div class="form-group">

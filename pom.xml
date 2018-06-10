@@ -13,7 +13,7 @@
         <endorsed.dir>${project.build.directory}/endorsed</endorsed.dir>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
-    
+
     <dependencies>
         <dependency>
             <groupId>org.springframework</groupId>
@@ -66,6 +66,11 @@
              <version>6.0.6</version>
 			<scope>runtime</scope>
 		</dependency>
+    <dependency>
+	<groupId>org.postgresql</groupId>
+	<artifactId>postgresql</artifactId>
+	<version>9.4-1201-jdbc4</version>
+</dependency>
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-jdbc</artifactId>
@@ -109,7 +114,7 @@
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.dataformat</groupId>
-            <artifactId>jackson-dataformat-csv</artifactId>       
+            <artifactId>jackson-dataformat-csv</artifactId>
             <version>2.5.3</version>
         </dependency>
         <dependency>
@@ -196,7 +201,7 @@
             <version>4.2.4.RELEASE</version>
             <type>jar</type>
         </dependency>
-        
+
         <dependency>
     <groupId>commons-logging</groupId>
     <artifactId>commons-logging</artifactId>
@@ -207,19 +212,19 @@
     <artifactId>commons-fileupload</artifactId>
     <version>1.2.1</version>
 </dependency>
- 
+
 <dependency>
     <groupId>commons-io</groupId>
     <artifactId>commons-io</artifactId>
     <version>2.5</version>
 </dependency>
- 
+
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-web</artifactId>
             <version>4.0.1.RELEASE</version>
         </dependency>
- 
+
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-config</artifactId>
@@ -230,7 +235,7 @@
             <artifactId>spring-security-taglibs</artifactId>
             <version>4.0.1.RELEASE</version>
         </dependency>
- 
+
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-acl</artifactId>
@@ -298,7 +303,7 @@
                     </execution>
                 </executions>
             </plugin>
-         
+
         </plugins>
     </build>
 

@@ -2,6 +2,7 @@
 /Users/sergiottellez/Desktop/Universidad/TFG/TFGPruebaFinal/TFGPruebaFinal/src/main/java/model/Grupo.java
 /Users/sergiottellez/Desktop/Universidad/TFG/TFGPruebaFinal/TFGPruebaFinal/src/main/java/config/MyAuthenticationProvider.java
 /Users/sergiottellez/Desktop/Universidad/TFG/TFGPruebaFinal/TFGPruebaFinal/src/main/java/dao/UserDao.java
+/Users/sergiottellez/Desktop/Universidad/TFG/TFGPruebaFinal/TFGPruebaFinal/src/main/java/config/Migrations.java
 /Users/sergiottellez/Desktop/Universidad/TFG/TFGPruebaFinal/TFGPruebaFinal/src/main/java/service/LoginServiceImpl.java
 /Users/sergiottellez/Desktop/Universidad/TFG/TFGPruebaFinal/TFGPruebaFinal/src/main/java/controller/UserRowMapper.java
 /Users/sergiottellez/Desktop/Universidad/TFG/TFGPruebaFinal/TFGPruebaFinal/src/main/java/dao/LoginDao.java

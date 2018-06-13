@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+ <beans xmlns="http://www.springframework.org/schema/beans"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xmlns:sec="http://www.springframework.org/schema/security"
+ xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+   	 http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd
+	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+
+
+<authentication-manager>
+<authentication-provider>
+
+<jdbc-user-service data-source-ref="dataSource"
+
+users-by-username-query="select dni,password from users where dni=? AND activo=1"
+
+authorities-by-username-query="select dni, role from user where dni=? and activo=1"
+
+/>
+
+</authentication-provider>
+
+</authentication-manager>
+
+<http auto-config="true">
+    <intercept-url pattern="/home" access="permitAll" />
+    <form-login login-page="/loginSecurity" default-target-url="/home" authentication-failure-url="/errors/access_denied" />
+    <logout logout-success-url="/logout" />
+    
+    
+    
+    
+</http>
+
+</beans>

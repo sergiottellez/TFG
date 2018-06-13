@@ -53,8 +53,8 @@
                  <prop key="cambiarPass">userController</prop>
                   <prop key="recuperarPass">userController</prop>
                    <prop key="recuperarPassActionlRec">userController</prop>
-                                      <prop key="recuperarPassActionlRec/*">userController</prop>
-                                       <prop key="recuperarPassAction*">userController</prop>
+                    <prop key="recuperarPassActionlRec/*">userController</prop>
+                     <prop key="recuperarPassAction*">userController</prop>
                                         <prop key="cambiarPassFinal">userController</prop>
                   <prop key="loginSecurity">userController</prop>
                     <prop key="errorLogin">userController</prop>

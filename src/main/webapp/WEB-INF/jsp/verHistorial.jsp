@@ -31,11 +31,50 @@
  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
  <script async="async"  src="https://cdn.rawgit.com/sergiottellez/TFG/0a02bc85/src/main/webapp/WEB-INF/jsp/confirmar.js"></script>
+<style>
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #166088;
+}
+
+li {
+    float: left;
+
+}
+
+li a {
+    display: inline-block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+
+li a:hover {
+    background-color: #111;
+}
+
+.active {
+    background-color: #62A9EC;
+}
+</style>
 </head>
 <body>
     
-              <a id="logout" href="/TFGPruebaFinal/logout"   class="btn btn-default btn-sm"> <i class="glyphicon glyphicon-log-out"></i>Logout </a>
+ <ul>
+  <li><a href="home" class="active">Home</a></li>
+  <c:if test="${user.role == 1}"> <li><a href="verLista">Ver lista</a></li></c:if>
+   <li><a href="editUser?id=${user.email}">Mi Perfil</a></li>
+   <c:if test="${user.role == 1}"><li><a href="summary">Summary</a></li></c:if>
+  <c:if test="${user.role == 1}"> <li><a href="newUser">Nuevo Usuario</a></li></c:if>
+      <c:if test="${user.role == 1}"><li><a href="verBajas">Bajas</a></li></c:if>
+  <li>  <a id="logout" href="logout">Logout</a></li>
 
+
+</ul> 
 <div class="container-fluid">
  <div class="row-fluid">
   <div class="col-md-6">

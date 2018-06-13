@@ -7,7 +7,7 @@
     <version>1.0-SNAPSHOT</version>
     <packaging>war</packaging>
 
-    <name>tfgpruebafinal</name>
+    <name>TFGPruebaFinal</name>
 
     <properties>
         <endorsed.dir>${project.build.directory}/endorsed</endorsed.dir>
@@ -173,12 +173,6 @@
             <type>jar</type>
         </dependency>
         <dependency>
-            
-             <groupId>org.flywaydb</groupId>
-            <artifactId>flyway-core</artifactId>
-            <version>3.2.1</version>
-        </dependency>
-        <dependency>
             <groupId>javax</groupId>
             <artifactId>javaee-api</artifactId>
             <version>7.0</version>
@@ -251,16 +245,6 @@
 
     <build>
         <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-war-plugin</artifactId>
-                <version>2.6</version>
-                <configuration>
-                    <warSourceDirectory>src/main/webapp</warSourceDirectory>
-                    <warName>tfgpruebafinal</warName>
-                    <failOnMissingWebXml>false</failOnMissingWebXml>
-                </configuration>
-            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>

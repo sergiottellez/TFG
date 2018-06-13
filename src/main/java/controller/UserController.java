@@ -465,7 +465,14 @@ public class UserController {
        session.setAttribute("user", user);
        model.addObject("user", user);
         session.setAttribute("tipoListado", 6);
-        model.setViewName("home");
+        if(user.getPrimerLogin() == 1){
+               model.setViewName("primerAcceso");
+ 
+         
+        }else{
+               model.setViewName("home");
+        }
+     
         return model;
     }else{
               model.setViewName("login");
@@ -925,7 +932,7 @@ public ModelAndView saveContact(@Valid @ModelAttribute("contacto") User contacto
     }
 */
   @RequestMapping(value = "/saveContactEdit", method = RequestMethod.POST)
-public String saveContact(@Valid @ModelAttribute("contacto") User contacto) {
+public String saveContact(@Valid @ModelAttribute("contacto") User contacto, HttpSession session) {
     
     Grupo grupo = this.findByNombreGrupo(contacto.getGrupoInvestigacion());
     Date fecha = new Date();
@@ -966,6 +973,7 @@ public String saveContact(@Valid @ModelAttribute("contacto") User contacto) {
     e.setFundador(rs.getInt(22));
     e.setCuota(rs.getInt(25));
     e.setNombreEmpresa(rs.getString(26));
+    e.setPrimerLogin(rs.getInt(27));
     return e;
         }
     });
@@ -1006,8 +1014,8 @@ public String saveContact(@Valid @ModelAttribute("contacto") User contacto) {
         
         
        }else{
-            String sql = "INSERT INTO user (user_id,fecha,orcid,dni,password,apellido2,apellido1,nombre,sexo,dblppersonname,authorkey,role,universidad,region,empresa,pais,email,grupoInvestigacion,antiguedad,reciente,activo,fundador,actual,cuota,nombreEmpresa)" +
-             "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?, ?,?)";
+            String sql = "INSERT INTO user (user_id,fecha,orcid,dni,password,apellido2,apellido1,nombre,sexo,dblppersonname,authorkey,role,universidad,region,empresa,pais,email,grupoInvestigacion,antiguedad,reciente,activo,fundador,actual,cuota,nombreEmpresa,primerLogin)" +
+             "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?, ?,?,?)";
         jdbcTemplate.update(sql, contacto.getUser_id(), fecha,
                 contacto.getOrcid(), contacto.getDni(),this.passwordEncoder.encode(contacto.getPassword()),contacto.getApellido2(),
                 contacto.getApellido1(),contacto.getNombre(),contacto.getSexo(),
@@ -1020,13 +1028,21 @@ public String saveContact(@Valid @ModelAttribute("contacto") User contacto) {
                 contacto.getActivo(),
                 contacto.getFundador(),
                 1,contacto.getCuota(),
-                contacto.getNombreEmpresa());
+                contacto.getNombreEmpresa(),
+                0);
+       }
+       
+       if(e.getUser_id().equals(this.user.getUser_id())){
+           this.user = e;
+           session.setAttribute("user", user);
+          
        }
   }catch(Exception e){
       return "error";
   }
     ModelAndView mv = new ModelAndView("home");
     if(contacto.getRole() == 1){
+        
     return "redirect:/verLista";
     }else{
         return "home";
@@ -1058,13 +1074,13 @@ public String saveContact(@Valid @ModelAttribute("contacto") User contacto) {
      
        try{
         
-    String sql = "INSERT INTO user (user_id,orcid,fecha,dni,password,apellido2,apellido1,nombre,sexo,dblppersonname,authorkey,role,universidad,region,empresa,pais,email,grupoInvestigacion,antiguedad,reciente,activo,fundador,actual,cuota,nombreEmpresa)"
-                    + " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?,?,?)";
+    String sql = "INSERT INTO user (user_id,orcid,fecha,dni,password,apellido2,apellido1,nombre,sexo,dblppersonname,authorkey,role,universidad,region,empresa,pais,email,grupoInvestigacion,antiguedad,reciente,activo,fundador,actual,cuota,nombreEmpresa,primerLogin)"
+                    + " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?,?,?,?)";
         jdbcTemplate.update(sql,contacto.getUser_id(),contacto.getOrcid(),fecha,contacto.getDni(),  this.passwordEncoder.encode(contacto.getPassword()),
                 contacto.getApellido2(), contacto.getApellido1(),contacto.getNombre(),
                 contacto.getSexo(),contacto.getDblppersonname(),contacto.getAuthorkey(),contacto.getRole(),
                 contacto.getUniversidad(),contacto.getRegion(),contacto.getEmpresa(),contacto.getPais(),contacto.getEmail(),contacto.getGrupoInvestigacion(),contacto.getAntiguedad(),
-                contacto.getReciente(),contacto.getActivo(),contacto.getFundador(),1, contacto.getCuota(),contacto.getNombreEmpresa());
+                contacto.getReciente(),contacto.getActivo(),contacto.getFundador(),1, contacto.getCuota(),contacto.getNombreEmpresa(),1);
    
         mv = new ModelAndView("home");
        }catch(Exception e){

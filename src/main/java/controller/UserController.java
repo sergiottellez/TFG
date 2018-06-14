@@ -758,15 +758,17 @@ public ModelAndView newUser(HttpServletRequest request,HttpSession session) {
         
       List<String> datosUniversidadLista= this.jdbcTemplate.queryForList(sql, String.class);
        
+      if(datosUniversidadLista.size() > 0){
        for(String s : datosUniversidadLista){ //Metemos todas las universidades de la BD
-           
-           if(!universidad.contains(s) && !s.equals(" ")){
+           if(s!= null){
+           if(!universidad.contains(s) && !s.equals(" ") ){
                universidad.add(s);
                
            }
-           
+           }
        }
        
+      
        
        
        
@@ -784,7 +786,7 @@ public ModelAndView newUser(HttpServletRequest request,HttpSession session) {
               }
               
        }
-       
+      }
       
        
        

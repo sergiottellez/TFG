@@ -66,7 +66,7 @@ li a:hover {
     
  <ul>
   <li><a href="home" class="active">Home</a></li>
-  <c:if test="${user.role == 1}"> <li><a href="verLista">Ver lista</a></li></c:if>
+  <c:if test="${user.role == 1}"> <li><a href="verLista">Listado de Socios</a></li></c:if>
    <li><a href="editUser?id=${user.email}">Mi Perfil</a></li>
    <c:if test="${user.role == 1}"><li><a href="summary">Summary</a></li></c:if>
   <c:if test="${user.role == 1}"> <li><a href="newUser">Nuevo Usuario</a></li></c:if>
@@ -140,7 +140,7 @@ li a:hover {
       <c:if test="${sessionScope.user.role == 1 ||sessionScope.user.email.equals(users.email)}" ><td><c:out value="${users.universidad}"/></td></c:if>
       <c:if test="${sessionScope.user.role == 1 ||sessionScope.user.email.equals(users.email)}" ><td><c:out value="${users.region}"/></td></c:if>
       <c:if test="${sessionScope.user.role == 1 ||sessionScope.user.email.equals(users.email)}" ><td> <a href="grupoUserP?id=${users.grupoInvestigacion}"> <c:out value="${users.grupoInvestigacion}"/></td></a></c:if>
-      <c:if test="${sessionScope.user.role == 1 ||sessionScope.user.email.equals(users.email)}" ><td><c:out value="${users.empresa}"/></td></c:if>
+      <c:if test="${sessionScope.user.role == 1 ||sessionScope.user.email.equals(users.email)}" ><td><c:if test="${users.empresa == 0}"><c:out value="No"/></c:if><c:if test="${users.empresa == 1}"><c:out value="Si"/></c:if></td></c:if></td>
       <c:if test="${sessionScope.user.role == 1 ||sessionScope.user.email.equals(users.email)}" ><td><c:out value="${users.antiguedad}"/></td></c:if>
       <c:if test="${sessionScope.user.role == 1 ||sessionScope.user.email.equals(users.email)}" ><td><c:out value="${users.reciente}"/></td></c:if>
       <c:if test="${sessionScope.user.role == 1 ||sessionScope.user.email.equals(users.email)}" ><td><c:if test="${users.activo == 1}"><c:out value="Si"/></c:if><c:if test="${users.activo == 0}"><c:out value="No"/></c:if></td></c:if>

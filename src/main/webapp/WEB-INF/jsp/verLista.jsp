@@ -73,7 +73,7 @@ li a:hover {
 
  <ul>
   <li><a href="home" class="active">Home</a></li>
-  <c:if test="${user.role == 1}"> <li><a href="verLista">Ver lista</a></li></c:if>
+  <c:if test="${user.role == 1}"> <li><a href="verLista">Listado de Socios</a></li></c:if>
    <li><a href="editUser?id=${user.email}">Mi Perfil</a></li>
    <c:if test="${user.role == 1}"><li><a href="summary">Summary</a></li></c:if>
   <c:if test="${user.role == 1}"> <li><a href="newUser">Nuevo Usuario</a></li></c:if>
@@ -163,7 +163,7 @@ li a:hover {
             <c:if test="${user.role == 1}"><td><a href="verHistorial?id=${users.user_id}" class="btn btn-primary btn-xs"><i class="glyphicon glyphicon-book"></i>Historial</a></td></c:if>
 
       <c:if test="${user.role == 1}" > <td><a href="editUser?id=${users.email}" class="btn btn-info btn-xs"><i class="glyphicon glyphicon-check"></i>Editar</a></td></c:if>
-      <c:if test="${user.role == 1}" ><td><a href="deleteUser?id=${users.user_id}" class="btn btn-danger btn-xs"><i class="glyphicon glyphicon-trash" onclick="confirmar()"></i>Eliminar</a></td> </c:if>
+      <c:if test="${user.role == 1}" ><td><a href="deleteUser?id=${users.user_id}" class="btn btn-danger btn-xs"><i class="glyphicon glyphicon-trash" onclick="return confirm('¿Desea dar de baja a este usuario del sistema?');"></i>Eliminar</a></td> </c:if>
       </tr>
     </c:forEach>    
     </tbody>

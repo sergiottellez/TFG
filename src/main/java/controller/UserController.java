@@ -1043,7 +1043,7 @@ public String saveContact(@Valid @ModelAttribute("contacto") User contacto, Http
     ModelAndView mv = new ModelAndView("home");
     if(contacto.getRole() == 1){
         
-    return "redirect:/verLista";
+    return "home";
     }else{
         return "home";
     }
@@ -1275,13 +1275,13 @@ public ModelAndView verBajas(HttpServletRequest request,HttpSession session) {
       
    }
    
-   
+   if(emails.size() > 0){
      for(Object a : values){
        email.add(a);
                }
      
      Object[] a = email.toArray();
-   System.out.println(email.get(0));
+   }
     model.addObject("emails",email);
     }
     return model;
@@ -1521,7 +1521,6 @@ public ModelAndView readPOI() throws IOException {
         this.l = new Lector(fileLocation);
                prove =   l.getFile();
                if(prove.isEmpty()){
-                   System.out.println("HE ENTRADO");
                }else{
                    int i = 2;
                    for(Fila f : prove){

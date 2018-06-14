@@ -39,9 +39,12 @@
  
     <a href="editUser?id=${user.email}"  class="btn btn-info  btninter centrado">Mi Perfil</a>
     
- <c:if test="${user.role == 1 && user.primerLogin == 0}"><a href='<c:url value="/summary" />' class="btn btn-info  btninter centrado">Summary</a></c:if>
+ <c:if test="${user.role == 1 && user.primerLogin == 0}"><a href='<c:url value="/summary" />' class="btn btn-info  btninter centrado">Resumen</a></c:if>
  
  <c:if test="${user.role == 1 && user.primerLogin == 0}"> <a href='<c:url value="/verBajas" />' class="btn btn-info  btninter centrado">Ver posibles bajas</a></c:if>
+
+ 
+  <c:if test="${user.role == 1 && user.primerLogin == 0}"> <a href='<c:url value="newUser" />' class="btn btn-info  btninter centrado">Nuevo Usuario</a></c:if>
 
  </div>
  

@@ -69,7 +69,7 @@ li a:hover {
               
  <ul>
   <li><a href="home" class="active">Home</a></li>
-  <c:if test="${user.role == 1}"> <li><a href="verLista">Ver lista</a></li></c:if>
+  <c:if test="${user.role == 1}"> <li><a href="verLista">Listado de Socios</a></li></c:if>
    <li><a href="editUser?id=${user.email}">Mi Perfil</a></li>
    <c:if test="${user.role == 1}"><li><a href="summary">Summary</a></li></c:if>
   <c:if test="${user.role == 1}"> <li><a href="newUser">Nuevo Usuario</a></li></c:if>
@@ -167,7 +167,7 @@ li a:hover {
      
      
      <div class="form-group">
-      <label for = "dblppersonname">Dblppersonname: </label>
+      <label for = "dblppersonname">DBLP: </label>
       <form:input path="dblppersonname" class="form-control"/>
      </div>
      

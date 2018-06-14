@@ -28,6 +28,7 @@
  <meta name="viewport" content="width=device-width, initial-scale=1">
  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
   <script async="async" src="https://cdn.rawgit.com/sergiottellez/TFG/165c8450/src/main/webapp/WEB-INF/jsp/ControlListado.js"/>
+ <script src="https://cdn.rawgit.com/sergiottellez/TFG/08e3f749/src/main/webapp/WEB-INF/jsp/borrado.js"> </script>
 
  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
@@ -132,7 +133,7 @@ li a:hover {
             <c:if test="${user.role == 1}"><td><a href="verHistorial?id=${users.user_id}" class="btn btn-primary btn-xs"><i class="glyphicon glyphicon-book"></i>Historial</a></td></c:if>
 
       <c:if test="${user.role == 1}" > <td><a href="editUser?id=${users.email}" class="btn btn-info btn-xs"><i class="glyphicon glyphicon-check"></i>Editar</a></td></c:if>
-      <c:if test="${user.role == 1}" ><td><a href="deleteUser?id=${users.user_id}" class="btn btn-danger btn-xs"><i class="glyphicon glyphicon-trash" onClick="return confirm('¿Desea dar de baja a este usuario del sistema?');"></i>Eliminar</a></td> </c:if>
+      <c:if test="${user.role == 1}" ><td><a href="deleteUser?id=${users.user_id}" class="btn btn-danger btn-xs"><i class="glyphicon glyphicon-trash" onClick="javascript: return borrado()"></i>Eliminar</a></td> </c:if>
      </tr>
     </c:forEach>    
     </tbody>

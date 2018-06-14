@@ -20,12 +20,14 @@
 <head>
     <link rel="shortcut icon" href="https://cdn.rawgit.com/sergiottellez/TFG/289ded45/src/main/webapp/WEB-INF/jsp/images/logo069_400x400.ico">
  <title>LISTADO SOCIOS</title>
+ 
 <script src="https://cdn.rawgit.com/sergiottellez/TFG/b4668f82/src/main/webapp/WEB-INF/jsp/jquery.min.js"> </script>
         <script src="https://cdn.rawgit.com/sergiottellez/TFG/b4668f82/src/main/webapp/WEB-INF/jsp/bootstrap.min.js" > </script>
+ <script src="https://cdn.rawgit.com/sergiottellez/TFG/08e3f749/src/main/webapp/WEB-INF/jsp/borrado.js"> </script>
 
 
 
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta http-equiv="Content-Type" charset="UTF-8">
  <meta name="viewport" content="width=device-width, initial-scale=1">
  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
   <script async="async" src="https://cdn.rawgit.com/sergiottellez/TFG/130baad8/src/main/webapp/WEB-INF/jsp/ControlListado.js"/>
@@ -65,9 +67,7 @@ li a:hover {
 }
 </style>
  
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="x-ua-compatible" content="ie=edge">
+
 </head>
 <body>
     
@@ -165,7 +165,7 @@ li a:hover {
             <c:if test="${user.role == 1}"><td><a href="verHistorial?id=${users.user_id}" class="btn btn-primary btn-xs"><i class="glyphicon glyphicon-book"></i>Historial</a></td></c:if>
 
       <c:if test="${user.role == 1}" > <td><a href="editUser?id=${users.email}" class="btn btn-info btn-xs"><i class="glyphicon glyphicon-check"></i>Editar</a></td></c:if>
-      <c:if test="${user.role == 1}" ><td><a href="deleteUser?id=${users.user_id}" class="btn btn-danger btn-xs"><i class="glyphicon glyphicon-trash" onclick="return confirm('¿Desea dar de baja a este usuario del sistema?');"></i>Eliminar</a></td> </c:if>
+      <c:if test="${user.role == 1}" ><td><a href="deleteUser?id=${users.user_id}" class="btn btn-danger btn-xs"><i class="glyphicon glyphicon-trash" onclick="javascript: return borrado()"></i>Eliminar</a></td> </c:if>
       </tr>
     </c:forEach>    
     </tbody>
